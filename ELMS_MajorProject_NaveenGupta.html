@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ELMS – E-Learning Management System | Naveen Gupta | A418145024009 | MCA | Amity University</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@600;700;800&display=swap');
+:root{
+  --g:#0F6E56;--gl:#1D9E75;--gbg:#E1F5EE;--gd:#085041;
+  --p:#534AB7;--pbg:#EEEDFE;
+  --a:#B45309;--abg:#FAEEDA;
+  --r:#B91C1C;--rbg:#FCEBEB;
+  --b:#185FA5;--bbg:#E6F1FB;
+  --border:#E5E7EB;--bg:#F3F4F6;--white:#fff;
+  --text:#111827;--text2:#6B7280;--text3:#9CA3AF;
+  --shadow:0 1px 3px rgba(0,0,0,.08);
+  --shadow2:0 4px 16px rgba(0,0,0,.1);
+  --rad:12px;--rads:8px;--sw:240px;--th:62px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+h1,h2,h3,h4,h5{font-family:'Poppins',sans-serif}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#d1d5db;border-radius:3px}
+
+/* ── AUTH ── */
+#auth{position:fixed;inset:0;background:linear-gradient(135deg,#064e3b,#0F6E56,#1D9E75,#065f46);display:flex;align-items:center;justify-content:center;z-index:900;padding:20px}
+.auth-left{flex:1;max-width:480px;color:#fff;padding:0 40px 0 0;display:none}
+@media(min-width:900px){.auth-left{display:block}}
+.auth-left h1{font-size:36px;font-weight:800;line-height:1.2;margin-bottom:14px}
+.auth-left p{font-size:14px;opacity:.85;line-height:1.8;margin-bottom:24px}
+.auth-feat{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px;opacity:.9}
+.auth-feat span{width:22px;height:22px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.auth-box{background:#fff;border-radius:16px;padding:36px;width:420px;box-shadow:0 20px 60px rgba(0,0,0,.25);flex-shrink:0}
+.auth-logo{text-align:center;margin-bottom:22px}
+.auth-logo .mk{width:54px;height:54px;background:var(--gbg);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px}
+.auth-logo h2{font-size:20px;color:var(--g)}
+.auth-logo p{font-size:11px;color:var(--text2);margin-top:3px}
+.role-tabs{display:flex;gap:4px;background:#F3F4F6;padding:4px;border-radius:var(--rads);margin-bottom:18px}
+.rt{flex:1;padding:7px;border:none;background:transparent;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;color:var(--text2);font-family:'Inter',sans-serif;transition:all .15s}
+.rt.on{background:#fff;color:var(--g);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.flabel{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px}
+.finput{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--rads);font-size:13px;font-family:'Inter',sans-serif;color:var(--text);background:#fff;transition:border-color .13s;outline:none}
+.finput:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(15,110,86,.1)}
+.fgroup{margin-bottom:14px}
+.pw-wrap{position:relative}
+.pw-wrap .finput{padding-right:36px}
+.pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:15px;color:var(--text2);background:none;border:none}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:var(--rads);font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'Inter',sans-serif;transition:all .15s;text-decoration:none}
+.btn-g{background:var(--g);color:#fff}
+.btn-g:hover{background:var(--gd);transform:translateY(-1px)}
+.btn-ol{background:#fff;color:var(--g);border:1.5px solid var(--g)}
+.btn-ol:hover{background:var(--gbg)}
+.btn-r{background:var(--r);color:#fff}
+.btn-r:hover{background:#991B1B}
+.btn-a{background:var(--a);color:#fff}
+.btn-sm{padding:5px 11px;font-size:12px}
+.btn-xs{padding:3px 8px;font-size:11px}
+.btn:disabled{opacity:.6;cursor:not-allowed;transform:none!important}
+.demo-box{margin-top:14px;padding:10px 12px;background:#F9FAFB;border-radius:var(--rads)}
+.demo-box p{font-size:11px;color:var(--text2);line-height:1.8}
+.err-msg{background:var(--rbg);color:var(--r);padding:8px 12px;border-radius:var(--rads);font-size:12px;margin-bottom:12px;display:none}
+.err-msg.show{display:block}
+
+/* ── LAYOUT ── */
+#app{display:flex;min-height:100vh}
+.sidebar{width:var(--sw);background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:200;transition:transform .25s}
+.sb-logo{display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid var(--border)}
+.sb-logo .lm{width:36px;height:36px;background:var(--g);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sb-logo .lt{font-size:15px;font-weight:700;color:var(--g)}
+.sb-logo .ls{font-size:10px;color:var(--text2)}
+.nav{flex:1;overflow-y:auto;padding:8px 0}
+.nsec{padding:10px 14px 4px;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px}
+.ni{display:flex;align-items:center;gap:9px;padding:9px 14px;cursor:pointer;font-size:13px;font-weight:500;color:var(--text2);border-left:3px solid transparent;transition:all .13s;user-select:none}
+.ni:hover{background:#F9FAFB;color:var(--text)}
+.ni.on{background:var(--gbg);color:var(--g);border-left-color:var(--g);font-weight:600}
+.ni .ico{font-size:16px;width:20px;text-align:center}
+.ni .nb{margin-left:auto;background:var(--r);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px}
+.sb-foot{padding:12px 14px;border-top:1px solid var(--border);display:flex;align-items:center;gap:9px}
+.av{display:flex;align-items:center;justify-content:center;border-radius:50%;font-weight:700;color:#fff;flex-shrink:0}
+.main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;min-height:100vh}
+.topbar{height:var(--th);background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100}
+.tb-title{font-size:17px;font-weight:700;color:var(--text)}
+.tb-sub{font-size:11px;color:var(--text2)}
+.tb-right{display:flex;align-items:center;gap:10px}
+.rpill{padding:3px 11px;border-radius:20px;font-size:11px;font-weight:700}
+.content{padding:20px;flex:1}
+.pg{display:none}.pg.on{display:block;animation:fi .3s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ── CARDS & METRICS ── */
+.card{background:#fff;border:1px solid var(--border);border-radius:var(--rad);overflow:hidden;box-shadow:var(--shadow)}
+.card-hd{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-hd h3{font-size:14px;font-weight:600}
+.card-bd{padding:18px}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.mc{background:#fff;border:1px solid var(--border);border-radius:var(--rad);padding:18px;box-shadow:var(--shadow)}
+.mc .ico{width:44px;height:44px;border-radius:var(--rads);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px}
+.mc .val{font-size:26px;font-weight:700;font-family:'Poppins',sans-serif}
+.mc .lbl{font-size:11px;color:var(--text2);font-weight:500;margin-top:2px}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.g-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{padding:10px 14px;font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.4px;background:#F9FAFB;border-bottom:1px solid var(--border);text-align:left;white-space:nowrap}
+.tbl td{padding:11px 14px;border-bottom:1px solid #F3F4F6;font-size:13px;vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#FAFAFA}
+
+/* ── BADGE ── */
+.bg{display:inline-block;padding:3px 9px;border-radius:5px;font-size:11px;font-weight:600}
+.bg-g{background:var(--gbg);color:var(--gd)}
+.bg-p{background:var(--pbg);color:#3C3489}
+.bg-a{background:var(--abg);color:#633806}
+.bg-r{background:var(--rbg);color:#7F1D1D}
+.bg-b{background:var(--bbg);color:#0C447C}
+.bg-gr{background:#F3F4F6;color:#4B5563}
+
+/* ── PROGRESS ── */
+.prog{height:7px;background:#E5E7EB;border-radius:4px;overflow:hidden}
+.pf{height:100%;border-radius:4px;transition:width .5s ease}
+
+/* ── MODAL ── */
+.mmask{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px}
+.mbox{background:#fff;border-radius:14px;width:520px;max-width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.22);display:flex;flex-direction:column}
+.mhd{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+.mhd h3{font-size:16px;font-weight:700}
+.mbd{padding:20px;flex:1;overflow-y:auto}
+.mft{display:flex;gap:8px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--border);flex-shrink:0}
+.xbtn{background:none;border:none;cursor:pointer;font-size:22px;color:var(--text2);line-height:1;padding:2px}
+
+/* ── COURSE CARD ── */
+.ccard{background:#fff;border:1px solid var(--border);border-radius:var(--rad);overflow:hidden;transition:transform .2s,box-shadow .2s}
+.ccard:hover{transform:translateY(-3px);box-shadow:var(--shadow2)}
+.cthumb{height:110px;display:flex;align-items:center;justify-content:center;font-size:48px}
+.cbody{padding:14px}
+.ctitle{font-size:14px;font-weight:700;margin-bottom:5px;line-height:1.3}
+.cmeta{font-size:11px;color:var(--text2);display:flex;gap:12px;flex-wrap:wrap;margin:7px 0 10px}
+.tag{padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;background:#F3F4F6;color:#4B5563}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+
+/* ── QUIZ ── */
+.qopt{display:flex;align-items:center;gap:10px;padding:10px 13px;border:1.5px solid var(--border);border-radius:var(--rads);cursor:pointer;margin-bottom:8px;transition:all .13s;font-size:13px}
+.qopt:hover{border-color:var(--g);background:var(--gbg)}
+.qopt.sel{border-color:var(--g);background:var(--gbg);font-weight:500}
+.qopt.ok{border-color:#16a34a;background:#DCFCE7}
+.qopt.wrong{border-color:var(--r);background:var(--rbg)}
+.qtimer{font-size:20px;font-weight:700;color:var(--r);font-family:'Poppins',sans-serif}
+
+/* ── MISC ── */
+.hidden{display:none!important}
+.page-hd{margin-bottom:18px}
+.page-hd h2{font-size:20px;font-weight:700}
+.page-hd p{font-size:12px;color:var(--text2);margin-top:3px}
+.empty{text-align:center;padding:40px 20px;color:var(--text2)}
+.empty .ei{font-size:44px;margin-bottom:10px}
+.flex-b{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.flex-g{display:flex;align-items:center;gap:10px}
+.sep{border:none;border-top:1px solid var(--border);margin:12px 0}
+.toast-wrap{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{background:#fff;border:1px solid var(--border);border-left:4px solid var(--g);border-radius:8px;padding:10px 14px;font-size:13px;font-weight:500;box-shadow:var(--shadow2);animation:fi .3s ease;max-width:300px}
+.toast.err{border-left-color:var(--r)}
+.toast.warn{border-left-color:var(--a)}
+
+/* ── CHARTS ── */
+.chart-bar{display:flex;align-items:flex-end;gap:8px;height:140px;padding:10px 0}
+.bar-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bar{width:100%;background:var(--g);border-radius:4px 4px 0 0;transition:height .5s ease;cursor:pointer}
+.bar:hover{background:var(--gl)}
+.bar-lbl{font-size:10px;color:var(--text2);text-align:center}
+.bar-val{font-size:10px;font-weight:600;color:var(--g)}
+
+/* WPR Table */
+.wpr-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.wpr-num{width:32px;height:32px;background:var(--gbg);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--g);flex-shrink:0}
+
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.sb-open{transform:none}
+  .main{margin-left:0}
+  .mgrid{grid-template-columns:1fr 1fr}
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .auth-box{width:100%;padding:24px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ AUTH ════════════════ -->
+<div id="auth">
+  <div class="auth-left">
+    <h1>E-Learning Management System</h1>
+    <p>A complete web-based platform for online education — manage courses, assignments, grading, quizzes, and student progress all in one place.</p>
+    <div class="auth-feat"><span>🎓</span> Student, Instructor & Admin roles</div>
+    <div class="auth-feat"><span>📚</span> Course creation, enrollment & lectures</div>
+    <div class="auth-feat"><span>📋</span> Assignment submission & grading</div>
+    <div class="auth-feat"><span>❓</span> Timed quiz with auto-submit</div>
+    <div class="auth-feat"><span>📊</span> Progress tracking & analytics</div>
+    <div class="auth-feat"><span>🔔</span> Real-time notification system</div>
+    <div class="auth-feat"><span>📈</span> Performance reports & grade cards</div>
+    <div style="margin-top:30px;font-size:11px;opacity:.6">MCA Major Project &nbsp;|&nbsp; Naveen Gupta (A418145024009) &nbsp;|&nbsp; Amity University, Greater Noida &nbsp;|&nbsp; Guide: Dr. Akanksha Singh</div>
+  </div>
+
+  <div class="auth-box">
+    <div class="auth-logo">
+      <div class="mk">🎓</div>
+      <h2>ELMS Portal</h2>
+      <p>Sign in to your account</p>
+    </div>
+    <div class="role-tabs" id="role-tabs">
+      <button class="rt on" onclick="pickRole('Admin',this)">Admin</button>
+      <button class="rt" onclick="pickRole('Instructor',this)">Instructor</button>
+      <button class="rt" onclick="pickRole('Student',this)">Student</button>
+    </div>
+    <div class="err-msg" id="auth-err">Invalid email or password. Please try again.</div>
+    <div class="fgroup"><label class="flabel">Email Address</label><input class="finput" id="l-email" type="email" placeholder="email@example.com" value="admin@elms.com"></div>
+    <div class="fgroup"><label class="flabel">Password</label>
+      <div class="pw-wrap">
+        <input class="finput" id="l-pass" type="password" placeholder="Enter password" value="admin123">
+        <button class="pw-eye" onclick="document.getElementById('l-pass').type=document.getElementById('l-pass').type==='password'?'text':'password'">👁</button>
+      </div>
+    </div>
+    <button class="btn btn-g" style="width:100%;justify-content:center;padding:11px;font-size:14px;margin-top:4px" onclick="doLogin()">Sign In →</button>
+    <p style="text-align:center;margin-top:12px;font-size:12px;color:var(--text2)">Don't have an account? <span style="color:var(--g);cursor:pointer;font-weight:600" onclick="showReg()">Register</span></p>
+    <div class="demo-box">
+      <p><strong>Demo accounts:</strong><br>
+      👤 Admin: admin@elms.com / admin123<br>
+      📚 Instructor: teacher@elms.com / teach123<br>
+      🎓 Student: naveen@elms.com / student123</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ APP ════════════════ -->
+<div id="app" class="hidden">
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-logo">
+      <div class="lm">🎓</div>
+      <div><div class="lt">ELMS</div><div class="ls">Amity University</div></div>
+    </div>
+    <nav class="nav" id="nav-menu"></nav>
+    <div class="sb-foot" id="sb-foot"></div>
+  </aside>
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:12px">
+        <button onclick="document.getElementById('sidebar').classList.toggle('sb-open')" style="background:none;border:none;font-size:22px;cursor:pointer;display:none" id="ham">☰</button>
+        <div>
+          <div class="tb-title" id="pg-title">Dashboard</div>
+          <div class="tb-sub">E-Learning Management System &nbsp;|&nbsp; Naveen Gupta (A418145024009)</div>
+        </div>
+      </div>
+      <div class="tb-right">
+        <span class="rpill" id="role-badge"></span>
+        <span style="font-size:13px;font-weight:500" id="tb-name"></span>
+      </div>
+    </header>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="mmask hidden" id="modal">
+  <div class="mbox">
+    <div class="mhd"><h3 id="mtitle"></h3><button class="xbtn" onclick="closeM()">×</button></div>
+    <div class="mbd" id="mbody"></div>
+    <div class="mft" id="mfoot"></div>
+  </div>
+</div>
+
+<!-- Toasts -->
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+'use strict';
+// ════════════════════════════════════════════════════════
+//  DATA  – persisted in localStorage
+// ════════════════════════════════════════════════════════
+const SK='elms_ng_v4';
+function mkDB(){
+  return {
+    users:[
+      {id:1,name:'Admin User',email:'admin@elms.com',pass:'admin123',role:'Admin',avatar:'#534AB7',joined:'2025-12-08'},
+      {id:2,name:'Dr. Priya Sharma',email:'teacher@elms.com',pass:'teach123',role:'Instructor',avatar:'#B45309',joined:'2025-12-08'},
+      {id:3,name:'Naveen Gupta',email:'naveen@elms.com',pass:'student123',role:'Student',avatar:'#0F6E56',joined:'2025-12-10'},
+      {id:4,name:'Anjali Verma',email:'anjali@elms.com',pass:'student123',role:'Student',avatar:'#185FA5',joined:'2025-12-11'},
+      {id:5,name:'Rahul Mehta',email:'rahul@elms.com',pass:'student123',role:'Student',avatar:'#993556',joined:'2025-12-12'},
+      {id:6,name:'Riya Singh',email:'riya@elms.com',pass:'student123',role:'Student',avatar:'#B45309',joined:'2026-01-05'},
+    ],
+    courses:[
+      {id:1,title:'Web Development Fundamentals',code:'CS-101',desc:'Complete guide to HTML, CSS, JavaScript, Bootstrap and React for beginners.',instructor:2,students:[3,4,5,6],cat:'Web',dur:'12 weeks',thumb:'🌐',tags:['HTML','CSS','JavaScript','React'],pub:true,
+        lectures:[
+          {id:1,title:'Introduction to HTML & Document Structure',min:25},
+          {id:2,title:'CSS Styling, Flexbox & Grid',min:35},
+          {id:3,title:'JavaScript Basics & DOM Manipulation',min:45},
+          {id:4,title:'Bootstrap 5 – Responsive Design',min:30},
+          {id:5,title:'React Components & Props',min:40},
+          {id:6,title:'React State & Hooks',min:38},
+        ]},
+      {id:2,title:'Database Management Systems',code:'CS-202',desc:'SQL, NoSQL, normalization, indexing, transactions and MongoDB integration.',instructor:2,students:[3,4,6],cat:'Database',dur:'10 weeks',thumb:'🗄️',tags:['SQL','MongoDB','DBMS','NoSQL'],pub:true,
+        lectures:[
+          {id:1,title:'Introduction to DBMS & Relational Model',min:30},
+          {id:2,title:'SQL – DDL, DML & Queries',min:40},
+          {id:3,title:'Normalization – 1NF to 3NF',min:28},
+          {id:4,title:'Transactions & ACID Properties',min:32},
+          {id:5,title:'MongoDB – Document Database',min:35},
+        ]},
+      {id:3,title:'Python Programming',code:'CS-303',desc:'Core Python with OOP, data structures, algorithms and file handling.',instructor:2,students:[3,5],cat:'Programming',dur:'8 weeks',thumb:'🐍',tags:['Python','OOP','DSA'],pub:true,
+        lectures:[
+          {id:1,title:'Python Basics & Data Types',min:20},
+          {id:2,title:'Control Flow & Functions',min:28},
+          {id:3,title:'OOP – Classes & Objects',min:35},
+          {id:4,title:'Data Structures – Lists, Stacks, Queues',min:40},
+        ]},
+      {id:4,title:'Software Engineering',code:'CS-404',desc:'SDLC, Agile, UML diagrams, testing methodologies and project management.',instructor:2,students:[4,6],cat:'Other',dur:'10 weeks',thumb:'⚙️',tags:['SDLC','Agile','UML','Testing'],pub:true,
+        lectures:[
+          {id:1,title:'Software Development Life Cycle',min:25},
+          {id:2,title:'Agile & Scrum Methodology',min:30},
+          {id:3,title:'UML – Use Case & Class Diagrams',min:35},
+        ]},
+    ],
+    assignments:[
+      {id:1,cid:1,title:'Build a Responsive Portfolio Website',desc:'Create a fully responsive personal portfolio using HTML5, CSS3, Bootstrap 5 and JavaScript. Must include Home, About, Skills, Projects and Contact sections.',due:'2026-04-30',max:100,by:2,
+        subs:[
+          {sid:3,file:'naveen_portfolio.zip',on:'2026-04-10',grade:88,fb:'Excellent layout! Great use of Bootstrap grid and responsive design. Minor improvement needed in animation.',graded:true},
+          {sid:4,file:'anjali_portfolio.zip',on:'2026-04-12',grade:null,fb:'',graded:false},
+          {sid:5,file:'rahul_portfolio.zip',on:'2026-04-14',grade:76,fb:'Good effort. Navigation could be improved. Overall presentation is clean.',graded:true},
+        ]},
+      {id:2,cid:2,title:'Hospital Management ER Diagram',desc:'Design a complete ER diagram for a hospital management system with entities: Patient, Doctor, Appointment, Ward, Medicine. Show all relationships with correct cardinalities.',due:'2026-04-25',max:50,by:2,
+        subs:[
+          {sid:3,file:'naveen_er.pdf',on:'2026-04-18',grade:45,fb:'Well-structured! All cardinalities correct. Excellent use of weak entities.',graded:true},
+          {sid:4,file:'anjali_er.pdf',on:'2026-04-20',grade:null,fb:'',graded:false},
+        ]},
+      {id:3,cid:3,title:'Python Data Structures Implementation',desc:'Implement Stack, Queue, Singly Linked List and Binary Search Tree in Python using OOP concepts. Include insertion, deletion and traversal operations.',due:'2026-05-05',max:100,by:2,subs:[]},
+      {id:4,cid:1,title:'JavaScript DOM Mini Project',desc:'Build a To-Do List app using HTML, CSS and vanilla JavaScript. Features: Add task, delete task, mark complete, filter by status, save to localStorage.',due:'2026-05-10',max:50,by:2,subs:[]},
+    ],
+    quizzes:[
+      {id:1,cid:1,title:'Web Development – Quiz 1',by:2,time:120,
+        qs:[
+          {q:'What does HTML stand for?',opts:['HyperText Markup Language','High Tech Modern Language','HyperText Modern Links','High Text Markup Language'],ans:0},
+          {q:'Which CSS property is used to change text color?',opts:['font-color','text-style','color','background-color'],ans:2},
+          {q:'JavaScript is a _____ language.',opts:['Compiled','Statically typed','Interpreted','Assembly'],ans:2},
+          {q:'Which HTML tag creates a hyperlink?',opts:['<link>','<a>','<href>','<url>'],ans:1},
+          {q:'What does CSS stand for?',opts:['Colorful Style Sheets','Cascading Style Sheets','Creative Style System','Computer Style Sheets'],ans:1},
+          {q:'Which method adds an element to the end of an array in JavaScript?',opts:['push()','pop()','shift()','unshift()'],ans:0},
+        ],attempts:[{sid:3,score:5,total:6,on:'2026-04-15'}]},
+      {id:2,cid:2,title:'DBMS – Fundamentals Quiz',by:2,time:90,
+        qs:[
+          {q:'What does DBMS stand for?',opts:['Database Management System','Data Base Modifier System','Digital Binary Management System','Data Bridge Management System'],ans:0},
+          {q:'Which SQL command is used to retrieve data?',opts:['INSERT','UPDATE','SELECT','DELETE'],ans:2},
+          {q:'First Normal Form (1NF) eliminates:',opts:['Partial dependencies','Transitive dependencies','Repeating groups','Redundant tables'],ans:2},
+          {q:'ACID stands for:',opts:['Atomicity Consistency Isolation Durability','Agility Consistency Integration Data','Atomicity Consistency Integration Design','None of the above'],ans:0},
+          {q:'MongoDB is a _____ database.',opts:['Relational','Hierarchical','Document-oriented','Network'],ans:2},
+        ],attempts:[]},
+    ],
+    progress:[
+      {sid:3,cid:1,done:[1,2,3],pct:50},
+      {sid:3,cid:2,done:[1,2,3,4,5],pct:100},
+      {sid:3,cid:3,done:[1],pct:25},
+      {sid:4,cid:1,done:[1,2],pct:33},
+      {sid:4,cid:2,done:[1],pct:20},
+      {sid:5,cid:1,done:[1,2,3,4],pct:67},
+      {sid:6,cid:1,done:[],pct:0},
+    ],
+    notifs:[
+      {id:1,uid:3,title:'Assignment Graded 🏆',msg:'"Build a Responsive Portfolio Website" graded: 88/100. Feedback: Excellent layout!',time:'2 hours ago',read:false,type:'grade'},
+      {id:2,uid:3,title:'New Assignment Posted 📋',msg:'New assignment "Hospital Management ER Diagram" in Database Management Systems.',time:'1 day ago',read:false,type:'assign'},
+      {id:3,uid:3,title:'Quiz Available ❓',msg:'"Web Development – Quiz 1" is now live. Due by 30 April.',time:'3 days ago',read:true,type:'quiz'},
+      {id:4,uid:3,title:'Enrolled Successfully 🎉',msg:'You have been enrolled in "Python Programming" course.',time:'1 week ago',read:true,type:'enroll'},
+      {id:5,uid:2,title:'New Submission 📤',msg:'Anjali Verma submitted "Build a Responsive Portfolio Website".',time:'4 hours ago',read:false,type:'sub'},
+      {id:6,uid:2,title:'New Submission 📤',msg:'Naveen Gupta submitted "Hospital Management ER Diagram".',time:'2 days ago',read:false,type:'sub'},
+      {id:7,uid:1,title:'New User Registered 👤',msg:'Riya Singh joined as a Student.',time:'1 week ago',read:true,type:'sys'},
+      {id:8,uid:1,title:'System Ready ✅',msg:'ELMS is fully operational. 6 users, 4 courses, 4 assignments.',time:'2 weeks ago',read:true,type:'sys'},
+    ],
+    announcements:[
+      {id:1,title:'Final Exam Schedule Published',msg:'Final practical exams will be held from 25 April to 30 April 2026. All students must ensure all assignments are submitted before 23 April.',by:1,date:'2026-04-10',target:'all'},
+      {id:2,title:'Project Submission Deadline',msg:'All MCA final year project reports must be submitted to the faculty guide by 01 May 2026.',by:1,date:'2026-04-12',target:'all'},
+      {id:3,title:'New Quiz Added – DBMS',msg:'A new quiz on DBMS Fundamentals has been added for Database Management Systems course. Attempt by 28 April 2026.',by:2,date:'2026-04-15',target:'Student'},
+    ],
+    nids:{user:7,course:5,assign:5,quiz:3,notif:9,ann:4},
+  };
+}
+let DB=(()=>{try{const s=localStorage.getItem(SK);return s?JSON.parse(s):mkDB()}catch{return mkDB()}})();
+function save(){localStorage.setItem(SK,JSON.stringify(DB))}
+
+// ════════════════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════════════════
+const $=id=>document.getElementById(id);
+const init=n=>n?.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase()||'U';
+const fmt=d=>{try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}catch{return d}};
+const fmtR=d=>{const diff=(Date.now()-new Date(d))/1e3;if(diff<60)return'Just now';if(diff<3600)return Math.floor(diff/60)+'m ago';if(diff<86400)return Math.floor(diff/3600)+'h ago';return Math.floor(diff/86400)+'d ago'};
+const catBg={Web:'#EEF2FF',Database:'#FEF3C7',Programming:'#DCFCE7',Other:'#F3F4F6'};
+const catThumb={Web:'🌐',Database:'🗄️',Programming:'💻','AI/ML':'🤖',Networking:'🔗',Other:'📚'};
+
+function toast(msg,type='ok'){
+  const t=document.createElement('div');
+  t.className='toast'+(type==='err'?' err':type==='warn'?' warn':'');
+  t.textContent=msg;
+  $('toasts').appendChild(t);
+  setTimeout(()=>t.remove(),3200);
+}
+
+// ════════════════════════════════════════════════════════
+//  AUTH
+// ════════════════════════════════════════════════════════
+let CU=null;
+const DEMO={Admin:{e:'admin@elms.com',p:'admin123'},Instructor:{e:'teacher@elms.com',p:'teach123'},Student:{e:'naveen@elms.com',p:'student123'}};
+function pickRole(r,btn){
+  document.querySelectorAll('.rt').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  $('l-email').value=DEMO[r].e; $('l-pass').value=DEMO[r].p;
+  $('auth-err').classList.remove('show');
+}
+function doLogin(){
+  const e=$('l-email').value.trim(),p=$('l-pass').value.trim();
+  const u=DB.users.find(u=>u.email===e&&u.pass===p);
+  if(!u){$('auth-err').classList.add('show');return}
+  CU=u; $('auth-err').classList.remove('show');
+  $('auth').classList.add('hidden'); $('app').classList.remove('hidden');
+  buildNav(); go('dashboard');
+  toast('Welcome back, '+CU.name.split(' ')[0]+'! 👋');
+}
+function showReg(){
+  openM('Register New Account',`
+    <div class="fgroup"><label class="flabel">Full Name *</label><input class="finput" id="rn" placeholder="Your full name"></div>
+    <div class="fgroup"><label class="flabel">Email *</label><input class="finput" id="re" type="email" placeholder="email@example.com"></div>
+    <div class="fgroup"><label class="flabel">Password *</label><input class="finput" id="rp" type="password" placeholder="Min 6 characters"></div>
+    <div class="fgroup"><label class="flabel">Role</label><select class="finput" id="rr"><option>Student</option><option>Instructor</option></select></div>
+  `,[{l:'Cancel',c:'btn-ol',fn:'closeM()'},{l:'Register',c:'btn-g',fn:'doReg()'}]);
+}
+function doReg(){
+  const n=$('rn').value.trim(),e=$('re').value.trim(),p=$('rp').value.trim(),r=$('rr').value;
+  if(!n||!e||!p)return toast('All fields required','err');
+  if(p.length<6)return toast('Password min 6 chars','err');
+  if(DB.users.find(u=>u.email===e))return toast('Email already registered','err');
+  const colors={Student:'#0F6E56',Instructor:'#B45309'};
+  DB.users.push({id:DB.nids.user++,name:n,email:e,pass:p,role:r,avatar:colors[r]||'#6B7280',joined:new Date().toISOString().split('T')[0]});
+  save(); closeM(); toast('Account created! Please sign in.');
+}
+function doLogout(){
+  CU=null; $('app').classList.add('hidden'); $('auth').classList.remove('hidden');
+  $('l-email').value='admin@elms.com'; $('l-pass').value='admin123';
+  document.querySelectorAll('.rt').forEach((b,i)=>{b.classList.toggle('on',i===0)});
+}
+
+// ════════════════════════════════════════════════════════
+//  NAV
+// ════════════════════════════════════════════════════════
+const NAVS={
+  Admin:[
+    {id:'dashboard',ico:'📊',lbl:'Dashboard'},
+    {id:'users',ico:'👥',lbl:'User Management'},
+    {id:'allcourses',ico:'📚',lbl:'All Courses'},
+    {id:'allassign',ico:'📋',lbl:'Assignments'},
+    {id:'announce',ico:'📢',lbl:'Announcements'},
+    {id:'reports',ico:'📈',lbl:'Reports'},
+    {id:'wpr',ico:'📝',lbl:'WPR Summary'},
+    {id:'notifs',ico:'🔔',lbl:'Notifications',badge:true},
+  ],
+  Instructor:[
+    {id:'dashboard',ico:'📊',lbl:'Dashboard'},
+    {id:'mycourses',ico:'📚',lbl:'My Courses'},
+    {id:'createcourse',ico:'➕',lbl:'Create Course'},
+    {id:'tchassign',ico:'📋',lbl:'Assignments'},
+    {id:'tchquiz',ico:'❓',lbl:'Quizzes'},
+    {id:'grading',ico:'🏆',lbl:'Grade Submissions'},
+    {id:'announce',ico:'📢',lbl:'Announcements'},
+    {id:'notifs',ico:'🔔',lbl:'Notifications',badge:true},
+  ],
+  Student:[
+    {id:'dashboard',ico:'📊',lbl:'Dashboard'},
+    {id:'browse',ico:'🔍',lbl:'Browse Courses'},
+    {id:'enrolled',ico:'📚',lbl:'My Courses'},
+    {id:'stuassign',ico:'📋',lbl:'Assignments'},
+    {id:'stuquiz',ico:'❓',lbl:'Quizzes'},
+    {id:'grades',ico:'🏆',lbl:'My Grades'},
+    {id:'announce',ico:'📢',lbl:'Announcements'},
+    {id:'notifs',ico:'🔔',lbl:'Notifications',badge:true},
+  ]
+};
+const TITLES={dashboard:'Dashboard',users:'User Management',allcourses:'All Courses',allassign:'Assignments',announce:'Announcements',reports:'Reports & Analytics',wpr:'Weekly Progress Report Summary',notifs:'Notifications',mycourses:'My Courses',createcourse:'Create Course',tchassign:'Assignments',tchquiz:'Quizzes',grading:'Grade Submissions',browse:'Browse Courses',enrolled:'My Enrolled Courses',stuassign:'My Assignments',stuquiz:'Quizzes',grades:'My Grades',profile:'Profile',coursedetail:'Course Details',quizattempt:'Quiz Attempt'};
+
+function buildNav(){
+  const items=NAVS[CU.role]||[];
+  const unread=DB.notifs.filter(n=>n.uid===CU.id&&!n.read).length;
+  $('nav-menu').innerHTML='<div class="nsec">Main Menu</div>'+
+    items.map(it=>`<div class="ni" id="nav-${it.id}" onclick="go('${it.id}')"><span class="ico">${it.ico}</span><span>${it.lbl}</span>${it.badge&&unread>0?`<span class="nb">${unread}</span>`:''}</div>`).join('')+
+    '<div class="nsec" style="margin-top:6px">Account</div>'+
+    `<div class="ni" id="nav-profile" onclick="go('profile')"><span class="ico">👤</span><span>Profile</span></div>`;
+  const rc={Admin:'#534AB7',Instructor:'#B45309',Student:'#0F6E56'};
+  const rbg={Admin:'#EEEDFE',Instructor:'#FAEEDA',Student:'#E1F5EE'};
+  $('sb-foot').innerHTML=`<div class="av" style="background:${CU.avatar};width:34px;height:34px;font-size:11px">${init(CU.name)}</div><div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${CU.name.split(' ')[0]}</div><div style="font-size:10px;font-weight:600;color:${rc[CU.role]}">${CU.role}</div></div><button onclick="doLogout()" style="background:none;border:none;cursor:pointer;font-size:17px;color:var(--text2)" title="Logout">⏻</button>`;
+  const rp=$('role-badge'); rp.textContent=CU.role; rp.style.background=rbg[CU.role]; rp.style.color=rc[CU.role];
+  $('tb-name').textContent=CU.name;
+  // ham button
+  const ham=$('ham'); if(ham) ham.style.display=window.innerWidth<=768?'block':'none';
+}
+
+let curPage='';
+function go(page,...args){
+  curPage=page;
+  document.querySelectorAll('.ni').forEach(el=>el.classList.remove('on'));
+  const el=$('nav-'+page); if(el) el.classList.add('on');
+  $('pg-title').textContent=TITLES[page]||page;
+  const c=$('content'); c.innerHTML='';
+  PAGES[page]?PAGES[page](...args):(c.innerHTML='<div class="empty"><div class="ei">🚧</div><p>Coming soon</p></div>');
+  window.scrollTo(0,0);
+  if(window.innerWidth<=768) document.getElementById('sidebar').classList.remove('sb-open');
+  buildNav();
+}
+
+// ════════════════════════════════════════════════════════
+//  MODAL
+// ════════════════════════════════════════════════════════
+function openM(title,body,btns=[]){
+  $('mtitle').textContent=title;
+  $('mbody').innerHTML=body;
+  $('mfoot').innerHTML=btns.map(b=>`<button class="btn ${b.c}" onclick="${b.fn}">${b.l}</button>`).join('');
+  $('modal').classList.remove('hidden');
+}
+function closeM(){$('modal').classList.add('hidden');$('mbody').innerHTML='';$('mfoot').innerHTML=''}
+$('modal').addEventListener('click',e=>{if(e.target===$('modal'))closeM()});
+
+// ════════════════════════════════════════════════════════
+//  REUSABLE UI COMPONENTS
+// ════════════════════════════════════════════════════════
+function metric(ico,lbl,val,bg,color){return`<div class="mc"><div class="ico" style="background:${bg}">${ico}</div><div class="val" style="color:${color}">${val}</div><div class="lbl">${lbl}</div></div>`}
+function roleBadge(r){const m={Admin:'bg-p',Instructor:'bg-a',Student:'bg-g'};return`<span class="bg ${m[r]||'bg-gr'}">${r}</span>`}
+function statusBadge(a,sid){
+  const sub=a.subs.find(s=>s.sid===sid);
+  if(!sub)return'<span class="bg bg-r">Not Submitted</span>';
+  if(sub.graded)return`<span class="bg bg-g">${sub.grade}/${a.max}</span>`;
+  return'<span class="bg bg-a">Submitted</span>';
+}
+function progBar(pct,color='var(--g)'){return`<div class="prog"><div class="pf" style="width:${pct}%;background:${color}"></div></div>`}
+function av(u,sz=32){return`<div class="av" style="background:${u.avatar};width:${sz}px;height:${sz}px;font-size:${sz/2.5}px">${init(u.name)}</div>`}
+function emptyState(ico,msg){return`<div class="empty"><div class="ei">${ico}</div><p>${msg}</p></div>`}
+
+// ════════════════════════════════════════════════════════
+//  PAGES
+// ════════════════════════════════════════════════════════
+const PAGES={};
+const pc=()=>$('content');
+
+// ─── DASHBOARD ──────────────────────────────────────────
+PAGES.dashboard=()=>{
+  if(CU.role==='Admin') adminDash();
+  else if(CU.role==='Instructor') teachDash();
+  else stuDash();
+};
+
+function adminDash(){
+  const stus=DB.users.filter(u=>u.role==='Student');
+  const ins=DB.users.filter(u=>u.role==='Instructor');
+  const totalSubs=DB.assignments.reduce((s,a)=>s+a.subs.length,0);
+  const totalGraded=DB.assignments.reduce((s,a)=>s+a.subs.filter(s=>s.graded).length,0);
+  pc().innerHTML=`
+    <div class="page-hd"><h2>System Dashboard 📊</h2><p>Complete overview of ELMS platform.</p></div>
+    <div class="mgrid">
+      ${metric('👨‍🎓','Total Students',stus.length,'#E1F5EE','#0F6E56')}
+      ${metric('👩‍🏫','Instructors',ins.length,'#EEEDFE','#534AB7')}
+      ${metric('📚','Active Courses',DB.courses.length,'#FAEEDA','#B45309')}
+      ${metric('📋','Assignments',DB.assignments.length,'#E6F1FB','#185FA5')}
+    </div>
+    <div class="g2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-hd"><h3>Enrollment by Course</h3></div>
+        <div class="card-bd">
+          <div class="chart-bar" id="enroll-chart"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><h3>Submission Statistics</h3></div>
+        <div class="card-bd">
+          ${DB.assignments.map(a=>{
+            const pct=a.subs.length>0?Math.round(a.subs.filter(s=>s.graded).length/a.subs.length*100):0;
+            return`<div style="margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+                <span style="font-size:12px;font-weight:500">${a.title.substring(0,35)}…</span>
+                <span style="font-size:11px;color:var(--text2)">${a.subs.length} sub</span>
+              </div>
+              ${progBar(pct)}
+              <div style="font-size:10px;color:var(--text2);margin-top:2px">${pct}% graded</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd"><h3>Recent Users</h3><button class="btn btn-g btn-sm" onclick="go('users')">View All</button></div>
+        <table class="tbl"><thead><tr><th>Name</th><th>Role</th><th>Joined</th></tr></thead><tbody>
+          ${DB.users.slice(-5).reverse().map(u=>`<tr><td><div class="flex-g">${av(u,28)}<span style="font-weight:500">${u.name}</span></div></td><td>${roleBadge(u.role)}</td><td style="font-size:11px;color:var(--text2)">${fmt(u.joined)}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+      <div class="card">
+        <div class="card-hd"><h3>Course Status</h3></div>
+        <table class="tbl"><thead><tr><th>Course</th><th>Students</th><th>Lectures</th></tr></thead><tbody>
+          ${DB.courses.map(c=>`<tr><td><div style="font-weight:500">${c.title}</div><span class="bg bg-p" style="font-size:10px">${c.code}</span></td><td>${c.students.length}</td><td>${c.lectures.length}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+    </div>`;
+  // chart
+  setTimeout(()=>{
+    const cc=$('enroll-chart');
+    if(!cc)return;
+    const mx=Math.max(...DB.courses.map(c=>c.students.length),1);
+    cc.innerHTML=DB.courses.map(c=>`<div class="bar-item"><div class="bar-val">${c.students.length}</div><div class="bar" style="height:${Math.round(c.students.length/mx*100)}px" title="${c.title}: ${c.students.length} students"></div><div class="bar-lbl">${c.code}</div></div>`).join('');
+  },50);
+}
+
+function teachDash(){
+  const mc=DB.courses.filter(c=>c.instructor===CU.id);
+  const ma=DB.assignments.filter(a=>mc.some(c=>c.id===a.cid));
+  const pending=ma.reduce((s,a)=>s+a.subs.filter(s=>!s.graded).length,0);
+  const allStu=[...new Set(mc.flatMap(c=>c.students))];
+  pc().innerHTML=`
+    <div class="page-hd"><h2>Welcome, ${CU.name.split(' ')[0]}! 📚</h2><p>Manage your courses and students.</p></div>
+    <div class="mgrid">
+      ${metric('📚','My Courses',mc.length,'#E1F5EE','#0F6E56')}
+      ${metric('👨‍🎓','My Students',allStu.length,'#EEEDFE','#534AB7')}
+      ${metric('📋','Assignments',ma.length,'#FAEEDA','#B45309')}
+      ${metric('⏳','Pending Grades',pending,'#FCEBEB','#B91C1C')}
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd"><h3>My Courses</h3><button class="btn btn-g btn-sm" onclick="go('createcourse')">+ New</button></div>
+        <table class="tbl"><thead><tr><th>Course</th><th>Students</th><th>Lectures</th><th></th></tr></thead><tbody>
+          ${mc.map(c=>`<tr><td><div style="font-weight:600">${c.title}</div><span class="bg bg-p" style="font-size:10px">${c.code}</span></td><td>${c.students.length}</td><td>${c.lectures.length}</td><td><button class="btn btn-ol btn-xs" onclick="curCid=${c.id};go('coursedetail')">Open</button></td></tr>`).join('')}
+        </tbody></table>
+      </div>
+      <div class="card">
+        <div class="card-hd"><h3>Recent Submissions</h3><button class="btn btn-g btn-sm" onclick="go('grading')">Grade All</button></div>
+        ${ma.flatMap(a=>a.subs.map(s=>({...s,atitle:a.title,max:a.max,aid:a.id}))).slice(0,5).map(s=>{
+          const u=DB.users.find(u=>u.id===s.sid);
+          return`<div style="display:flex;align-items:center;gap:10px;padding:10px 18px;border-bottom:1px solid var(--border)">
+            ${av(u||{avatar:'#9CA3AF',name:'?'},28)}
+            <div style="flex:1"><div style="font-size:13px;font-weight:500">${u?.name||'Unknown'}</div><div style="font-size:11px;color:var(--text2)">${s.atitle.substring(0,30)}…</div></div>
+            ${s.graded?`<span class="bg bg-g">${s.grade}/${s.max}</span>`:'<span class="bg bg-a">Pending</span>'}
+          </div>`;
+        }).join('') || emptyState('📭','No submissions yet')}
+      </div>
+    </div>`;
+}
+
+function stuDash(){
+  const mc=DB.courses.filter(c=>c.students.includes(CU.id));
+  const prog=DB.progress.filter(p=>p.sid===CU.id);
+  const ma=DB.assignments.filter(a=>mc.some(c=>c.id===a.cid));
+  const graded=DB.assignments.flatMap(a=>a.subs.filter(s=>s.sid===CU.id&&s.graded));
+  const avg=graded.length?Math.round(graded.reduce((s,g)=>s+g.grade,0)/graded.length):0;
+  const unread=DB.notifs.filter(n=>n.uid===CU.id&&!n.read).length;
+  pc().innerHTML=`
+    <div class="page-hd"><h2>Welcome, ${CU.name.split(' ')[0]}! 🎓</h2><p>Continue your learning journey today.</p></div>
+    <div class="mgrid">
+      ${metric('📚','Enrolled Courses',mc.length,'#E1F5EE','#0F6E56')}
+      ${metric('📋','Assignments',ma.length,'#EEEDFE','#534AB7')}
+      ${metric('✅','Graded',graded.length,'#FAEEDA','#B45309')}
+      ${metric('📊','Avg Score',avg?avg+'%':'—',avg>=75?'#DCFCE7':avg>=50?'#FEF3C7':'#E6F1FB',avg>=75?'#166534':avg>=50?'#92400E':'#185FA5')}
+    </div>
+    <div class="g2" style="margin-bottom:16px">
+      <div class="card">
+        <div class="card-hd"><h3>Course Progress</h3></div>
+        <div class="card-bd">
+          ${mc.map(c=>{
+            const p=prog.find(p=>p.cid===c.id)||{pct:0};
+            return`<div style="margin-bottom:14px"><div style="display:flex;justify-content:space-between;margin-bottom:5px"><span style="font-size:13px;font-weight:500">${c.title}</span><span style="font-size:12px;font-weight:600;color:var(--g)">${p.pct}%</span></div>${progBar(p.pct)}<div style="font-size:11px;color:var(--text2);margin-top:3px">${c.code} &nbsp;•&nbsp; ${c.lectures.length} lectures</div></div>`;
+          }).join('')||emptyState('📚','Enroll in courses to track progress')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><h3>Recent Grades</h3><button class="btn btn-ol btn-sm" onclick="go('grades')">All Grades</button></div>
+        <div class="card-bd">
+          ${graded.slice(0,4).map(g=>{
+            const a=DB.assignments.find(a=>a.subs.includes(g));
+            if(!a)return'';
+            const pct=Math.round(g.grade/a.max*100);
+            return`<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">${a.title.substring(0,30)}…</span><span class="bg ${pct>=75?'bg-g':pct>=50?'bg-a':'bg-r'}">${g.grade}/${a.max}</span></div>${progBar(pct,pct>=75?'var(--g)':pct>=50?'var(--a)':'var(--r)')}</div>`;
+          }).join('')||emptyState('🏆','No grades yet')}
+        </div>
+      </div>
+    </div>
+    ${unread>0?`<div class="card" style="margin-bottom:16px"><div class="card-hd"><h3>🔔 ${unread} Unread Notification${unread>1?'s':''}</h3><button class="btn btn-ol btn-sm" onclick="go('notifs')">View All</button></div>${DB.notifs.filter(n=>n.uid===CU.id&&!n.read).map(n=>`<div style="display:flex;gap:12px;padding:12px 18px;border-bottom:1px solid var(--border)"><div style="width:8px;height:8px;border-radius:50%;background:var(--g);flex-shrink:0;margin-top:5px"></div><div><div style="font-size:13px;font-weight:600">${n.title}</div><div style="font-size:12px;color:var(--text2)">${n.msg}</div><div style="font-size:11px;color:var(--text3);margin-top:3px">${n.time}</div></div></div>`).join('')}</div>`:''}`;
+}
+
+// ─── USERS (Admin) ────────────────────────────────────────
+PAGES.users=()=>{
+  let filter='All',search='';
+  const render=()=>{
+    const list=DB.users.filter(u=>(filter==='All'||u.role===filter)&&(u.name.toLowerCase().includes(search)||u.email.toLowerCase().includes(search)));
+    $('utbody').innerHTML=list.map(u=>`<tr><td><div class="flex-g">${av(u,32)}<div><div style="font-weight:600">${u.name}</div></div></div></td><td style="color:var(--text2);font-size:12px">${u.email}</td><td>${roleBadge(u.role)}</td><td style="font-size:12px;color:var(--text2)">${fmt(u.joined)}</td><td><button class="btn btn-r btn-xs" ${u.id===CU.id?'disabled':''} onclick="delUser(${u.id})">Delete</button></td></tr>`).join('');
+  };
+  pc().innerHTML=`
+    <div class="flex-b"><div class="page-hd" style="margin-bottom:0"><h2>User Management</h2><p>${DB.users.length} registered users</p></div><button class="btn btn-g" onclick="addUserModal()">+ Add User</button></div>
+    <div class="card" style="margin-top:16px">
+      <div class="card-hd" style="flex-wrap:wrap;gap:10px">
+        <div style="display:flex;gap:5px;background:#F3F4F6;padding:4px;border-radius:8px">
+          ${['All','Admin','Instructor','Student'].map(r=>`<button onclick="this.parentElement.querySelectorAll('button').forEach(b=>b.style.background='transparent');this.style.background='#fff';filter='${r}';render()" style="padding:5px 12px;border:none;border-radius:5px;font-size:12px;font-weight:600;cursor:pointer;background:${r==='All'?'#fff':'transparent'};font-family:inherit">${r}</button>`).join('')}
+        </div>
+        <input class="finput" style="width:220px" placeholder="🔍 Search users…" oninput="search=this.value.toLowerCase();render()">
+      </div>
+      <table class="tbl"><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Action</th></tr></thead><tbody id="utbody"></tbody></table>
+    </div>`;
+  render();
+};
+function addUserModal(){
+  openM('Add New User',`
+    <div class="fgroup"><label class="flabel">Full Name *</label><input class="finput" id="un"></div>
+    <div class="fgroup"><label class="flabel">Email *</label><input class="finput" id="ue" type="email"></div>
+    <div class="fgroup"><label class="flabel">Password *</label><input class="finput" id="up" type="password" placeholder="Min 6 chars"></div>
+    <div class="fgroup"><label class="flabel">Role</label><select class="finput" id="ur"><option>Student</option><option>Instructor</option><option>Admin</option></select></div>
+  `,[{l:'Cancel',c:'btn-ol',fn:'closeM()'},{l:'Add User',c:'btn-g',fn:'saveUser()'}]);
+}
+function saveUser(){
+  const n=$('un').value.trim(),e=$('ue').value.trim(),p=$('up').value.trim(),r=$('ur').value;
+  if(!n||!e||!p)return toast('All fields required','err');
+  if(DB.users.find(u=>u.email===e))return toast('Email already exists','err');
+  const c={Student:'#0F6E56',Instructor:'#B45309',Admin:'#534AB7'};
+  DB.users.push({id:DB.nids.user++,name:n,email:e,pass:p,role:r,avatar:c[r],joined:new Date().toISOString().split('T')[0]});
+  save(); closeM(); go('users'); toast('User added successfully!');
+}
+function delUser(id){
+  if(!confirm('Delete this user permanently?'))return;
+  DB.users=DB.users.filter(u=>u.id!==id);
+  DB.courses.forEach(c=>c.students=c.students.filter(s=>s!==id));
+  save(); go('users'); toast('User deleted','warn');
+}
+
+// ─── COURSES (Admin) ──────────────────────────────────────
+PAGES.allcourses=()=>{
+  pc().innerHTML=`<div class="page-hd"><h2>All Courses</h2><p>${DB.courses.length} courses in the system</p></div><div class="g-auto">${DB.courses.map(c=>courseCard(c,'admin')).join('')}</div>`;
+};
+PAGES.mycourses=()=>{
+  const mine=DB.courses.filter(c=>c.instructor===CU.id);
+  pc().innerHTML=`<div class="flex-b"><div class="page-hd" style="margin-bottom:0"><h2>My Courses</h2><p>${mine.length} courses created</p></div><button class="btn btn-g" onclick="go('createcourse')">+ New Course</button></div><div class="g-auto" style="margin-top:16px">${mine.length?mine.map(c=>courseCard(c,'teacher')).join(''):emptyState('📚','No courses yet — create your first!')}</div>`;
+};
+PAGES.browse=()=>{
+  pc().innerHTML=`<div class="page-hd"><h2>Browse All Courses</h2><p>Discover and enroll in courses</p></div><div class="g-auto">${DB.courses.filter(c=>c.pub).map(c=>courseCard(c,'student')).join('')}</div>`;
+};
+PAGES.enrolled=()=>{
+  const mine=DB.courses.filter(c=>c.students.includes(CU.id));
+  pc().innerHTML=`<div class="page-hd"><h2>My Enrolled Courses</h2><p>${mine.length} courses enrolled</p></div><div class="g-auto">${mine.length?mine.map(c=>courseCard(c,'enrolled')).join(''):emptyState('📚','Not enrolled yet! Browse courses first.')}  </div>`;
+};
+function courseCard(c,mode){
+  const ins=DB.users.find(u=>u.id===c.instructor);
+  const pr=DB.progress.find(p=>p.sid===CU.id&&p.cid===c.id);
+  const enrolled=c.students.includes(CU.id);
+  return`<div class="ccard">
+    <div class="cthumb" style="background:${catBg[c.cat]||'#F3F4F6'}">${c.thumb}</div>
+    <div class="cbody">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px">
+        <span class="bg bg-p" style="font-size:10px">${c.code}</span>
+        <span class="bg bg-g" style="font-size:10px">Active</span>
+      </div>
+      <div class="ctitle">${c.title}</div>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:8px;line-height:1.5">${c.desc.substring(0,80)}…</p>
+      <div class="cmeta"><span>🕐 ${c.dur}</span><span>👥 ${c.students.length}</span><span>🎬 ${c.lectures.length} lec</span></div>
+      ${pr?`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span>Progress</span><span style="font-weight:600;color:var(--g)">${pr.pct}%</span></div>${progBar(pr.pct)}</div>`:''}
+      <div class="tags">${c.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div style="margin-top:12px;display:flex;gap:6px">
+        ${mode==='student'?
+          (enrolled?`<span class="bg bg-g">✓ Enrolled</span>`:
+          `<button class="btn btn-g btn-sm" style="flex:1;justify-content:center" onclick="enrollCourse(${c.id})">Enroll Free</button>`)
+        :mode==='enrolled'?
+          `<button class="btn btn-g btn-sm" style="flex:1;justify-content:center" onclick="curCid=${c.id};go('coursedetail')">Continue Learning →</button>`
+        :mode==='teacher'?
+          `<button class="btn btn-ol btn-sm" onclick="curCid=${c.id};go('coursedetail')">Manage</button><button class="btn btn-r btn-xs" onclick="delCourse(${c.id})">Delete</button>`
+        :`<button class="btn btn-ol btn-xs" onclick="curCid=${c.id};go('coursedetail')">View</button><button class="btn btn-r btn-xs" onclick="delCourse(${c.id})">Delete</button>`}
+      </div>
+    </div>
+  </div>`;
+}
+function enrollCourse(id){
+  const c=DB.courses.find(c=>c.id===id);
+  if(!c)return;
+  if(c.students.includes(CU.id))return toast('Already enrolled!','warn');
+  c.students.push(CU.id);
+  if(!DB.progress.find(p=>p.sid===CU.id&&p.cid===id)) DB.progress.push({sid:CU.id,cid:id,done:[],pct:0});
+  DB.notifs.push({id:DB.nids.notif++,uid:CU.id,title:'Enrolled! 🎉',msg:`You joined "${c.title}"`,time:'Just now',read:false,type:'enroll'});
+  save(); PAGES.browse(); toast('Enrolled in '+c.title+'! 🎉');
+}
+function delCourse(id){
+  if(!confirm('Delete this course and all its data?'))return;
+  DB.courses=DB.courses.filter(c=>c.id!==id);
+  DB.assignments=DB.assignments.filter(a=>a.cid!==id);
+  save(); go(CU.role==='Admin'?'allcourses':'mycourses'); toast('Course deleted','warn');
+}
+
+// ─── COURSE DETAIL ────────────────────────────────────────
+let curCid=null;
+PAGES.coursedetail=()=>{
+  const c=DB.courses.find(c=>c.id===curCid);
+  if(!c){pc().innerHTML=emptyState('🔍','Course not found');return}
+  const pr=DB.progress.find(p=>p.sid===CU.id&&p.cid===c.id)||{done:[],pct:0};
+  const ins=DB.users.find(u=>u.id===c.instructor);
+  $('pg-title').textContent=c.title;
+  pc().innerHTML=`
+    <div class="g2">
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hd"><h3>🎬 Lectures (${c.lectures.length})</h3>${CU.role==='Student'?`<span style="font-size:12px;color:var(--g);font-weight:600">${pr.pct}% complete</span>`:''}</div>
+          ${c.lectures.map(l=>{
+            const done=pr.done.includes(l.id);
+            return`<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border)">
+              <div style="width:32px;height:32px;border-radius:50%;background:${done?'var(--gbg)':'#F3F4F6'};display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:${done?'var(--g)':'var(--text2)'}">${done?'✓':l.id}</div>
+              <div style="flex:1"><div style="font-size:13px;font-weight:500">${l.title}</div><div style="font-size:11px;color:var(--text2)">🕐 ${l.min} minutes</div></div>
+              ${CU.role==='Student'?`<button class="btn ${done?'btn-ol':'btn-g'} btn-xs" onclick="markLec(${c.id},${l.id})">${done?'Done':'Watch'}</button>`:
+              CU.role==='Instructor'?`<button class="btn btn-r btn-xs" onclick="delLec(${c.id},${l.id})">Remove</button>`:''}
+            </div>`;
+          }).join('')}
+          ${CU.role==='Student'?`<div style="padding:14px 16px">${progBar(pr.pct)}<div style="font-size:11px;color:var(--text2);margin-top:4px">${pr.done.length}/${c.lectures.length} lectures completed</div></div>`:''}
+        </div>
+        ${CU.role==='Instructor'?`<div class="card">
+          <div class="card-hd"><h3>➕ Add Lecture</h3></div>
+          <div class="card-bd">
+            <div class="fgroup"><label class="flabel">Lecture Title *</label><input class="finput" id="lt" placeholder="e.g. React Hooks explained"></div>
+            <div class="fgroup"><label class="flabel">Duration (minutes)</label><input class="finput" id="ld" type="number" value="30" min="1"></div>
+            <button class="btn btn-g" onclick="addLec(${c.id})">Add Lecture</button>
+          </div>
+        </div>`:''}
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hd"><h3>ℹ️ Course Info</h3></div>
+          <div class="card-bd">
+            <p style="font-size:13px;color:var(--text2);margin-bottom:14px;line-height:1.6">${c.desc}</p>
+            <table style="width:100%;font-size:12px">
+              ${[['Code',c.code],['Category',c.cat],['Duration',c.dur],['Lectures',c.lectures.length],['Enrolled',c.students.length],['Instructor',ins?.name||'—']].map(([k,v])=>`<tr><td style="color:var(--text2);padding:5px 0;border-bottom:1px solid var(--border)">${k}</td><td style="font-weight:500;text-align:right;padding:5px 0;border-bottom:1px solid var(--border)">${v}</td></tr>`).join('')}
+            </table>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hd"><h3>📋 Assignments</h3></div>
+          ${DB.assignments.filter(a=>a.cid===c.id).map(a=>`<div style="padding:12px 16px;border-bottom:1px solid var(--border)"><div style="font-weight:500;font-size:13px">${a.title}</div><div style="font-size:11px;color:var(--text2);margin-top:3px">Due: ${fmt(a.due)} &nbsp;|&nbsp; Max: ${a.max} marks &nbsp;|&nbsp; ${a.subs.length} submitted</div></div>`).join('')||`<div style="padding:16px;font-size:13px;color:var(--text2)">No assignments yet</div>`}
+        </div>
+        ${CU.role==='Instructor'?`<div class="card">
+          <div class="card-hd"><h3>👥 Enrolled Students (${c.students.length})</h3></div>
+          <div class="card-bd">
+            ${c.students.map(sid=>{const u=DB.users.find(u=>u.id===sid);return u?`<div class="flex-g" style="margin-bottom:10px">${av(u,28)}<span style="font-size:13px">${u.name}</span></div>`:'';}).join('')||'<span style="color:var(--text2);font-size:13px">No students enrolled</span>'}
+          </div>
+        </div>`:''}
+      </div>
+    </div>`;
+};
+function markLec(cid,lid){
+  let pr=DB.progress.find(p=>p.sid===CU.id&&p.cid===cid);
+  if(!pr){pr={sid:CU.id,cid,done:[],pct:0};DB.progress.push(pr)}
+  if(!pr.done.includes(lid)) pr.done.push(lid);
+  const c=DB.courses.find(c=>c.id===cid);
+  pr.pct=Math.round(pr.done.length/c.lectures.length*100);
+  save(); PAGES.coursedetail();
+  toast(pr.pct===100?'🎉 Course completed! Well done!':'Lecture marked complete! ✅');
+}
+function addLec(cid){
+  const t=$('lt').value.trim(),d=parseInt($('ld').value)||30;
+  if(!t)return toast('Enter lecture title','err');
+  const c=DB.courses.find(c=>c.id===cid);
+  c.lectures.push({id:c.lectures.length+1,title:t,min:d});
+  save(); PAGES.coursedetail(); toast('Lecture added!');
+}
+function delLec(cid,lid){
+  const c=DB.courses.find(c=>c.id===cid);
+  c.lectures=c.lectures.filter(l=>l.id!==lid);
+  save(); PAGES.coursedetail(); toast('Lecture removed','warn');
+}
+
+// ─── CREATE COURSE ────────────────────────────────────────
+PAGES.createcourse=()=>{
+  pc().innerHTML=`
+    <div class="page-hd"><h2>Create New Course</h2></div>
+    <div style="max-width:640px">
+      <div class="card">
+        <div class="card-bd">
+          <div class="g2">
+            <div class="fgroup"><label class="flabel">Course Title *</label><input class="finput" id="ct" placeholder="e.g. Web Development"></div>
+            <div class="fgroup"><label class="flabel">Course Code *</label><input class="finput" id="cc" placeholder="e.g. CS-401"></div>
+          </div>
+          <div class="fgroup"><label class="flabel">Description</label><textarea class="finput" id="cd" placeholder="What will students learn?" style="min-height:80px"></textarea></div>
+          <div class="g2">
+            <div class="fgroup"><label class="flabel">Category</label><select class="finput" id="ccat"><option>Web</option><option>Database</option><option>Programming</option><option>AI/ML</option><option>Networking</option><option>Other</option></select></div>
+            <div class="fgroup"><label class="flabel">Duration</label><input class="finput" id="cdur" placeholder="e.g. 10 weeks"></div>
+          </div>
+          <div class="fgroup"><label class="flabel">Tags (comma separated)</label><input class="finput" id="ctags" placeholder="HTML, CSS, JavaScript"></div>
+          <div style="display:flex;gap:10px;margin-top:6px">
+            <button class="btn btn-ol" onclick="go('mycourses')">Cancel</button>
+            <button class="btn btn-g" onclick="saveCourse()">Create Course</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+};
+function saveCourse(){
+  const t=$('ct').value.trim(),c=$('cc').value.trim().toUpperCase();
+  if(!t||!c)return toast('Title and code required','err');
+  if(DB.courses.find(x=>x.code===c))return toast('Course code already exists','err');
+  const th=catThumb[$('ccat').value]||'📚';
+  DB.courses.push({id:DB.nids.course++,title:t,code:c,desc:$('cd').value||'Course description.',instructor:CU.id,students:[],cat:$('ccat').value,dur:$('cdur').value||'8 weeks',thumb:th,tags:$('ctags').value.split(',').map(x=>x.trim()).filter(Boolean),pub:true,lectures:[]});
+  save(); go('mycourses'); toast('Course created! 🎉');
+}
+
+// ─── ASSIGNMENTS ──────────────────────────────────────────
+PAGES.allassign=()=>renderAssign('admin');
+PAGES.tchassign=()=>renderAssign('teacher');
+PAGES.stuassign=()=>renderAssign('student');
+
+function renderAssign(mode){
+  let assigns=DB.assignments;
+  if(mode==='teacher'){const ids=DB.courses.filter(c=>c.instructor===CU.id).map(c=>c.id);assigns=assigns.filter(a=>ids.includes(a.cid))}
+  if(mode==='student'){const ids=DB.courses.filter(c=>c.students.includes(CU.id)).map(c=>c.id);assigns=assigns.filter(a=>ids.includes(a.cid))}
+  pc().innerHTML=`
+    <div class="flex-b">
+      <div class="page-hd" style="margin-bottom:0"><h2>Assignments</h2><p>${assigns.length} total</p></div>
+      ${mode==='teacher'?`<button class="btn btn-g" onclick="addAssignModal()">+ Post Assignment</button>`:''}
+    </div>
+    <div class="card" style="margin-top:16px">
+      <table class="tbl"><thead><tr><th>Assignment</th><th>Course</th><th>Due</th><th>Marks</th><th>${mode==='student'?'Status':'Submissions'}</th><th>Action</th></tr></thead><tbody>
+        ${assigns.map(a=>{
+          const cr=DB.courses.find(c=>c.id===a.cid);
+          const mySub=a.subs.find(s=>s.sid===CU.id);
+          const pending=a.subs.filter(s=>!s.graded).length;
+          const overdue=new Date(a.due)<new Date();
+          return`<tr>
+            <td><div style="font-weight:600">${a.title}</div><div style="font-size:11px;color:var(--text2);margin-top:2px">${a.desc.substring(0,50)}…</div></td>
+            <td>${cr?`<span class="bg bg-p" style="font-size:10px">${cr.code}</span>`:'—'}</td>
+            <td><div style="font-size:12px">${fmt(a.due)}</div>${overdue?`<div style="font-size:10px;color:var(--r)">⚠ Overdue</div>`:''}</td>
+            <td>${a.max}</td>
+            <td>${mode==='student'?statusBadge(a,CU.id):`<span style="font-size:12px">${a.subs.length} submitted</span>${pending>0?` <span class="bg bg-a" style="font-size:10px">${pending} pending</span>`:''}`}</td>
+            <td><div class="flex-g">
+              ${mode==='student'&&!mySub?`<button class="btn btn-g btn-xs" onclick="submitModal(${a.id})">Submit</button>`:''}
+              ${mode==='student'&&mySub&&mySub.graded?`<span style="font-size:11px;color:var(--text2);font-style:italic">${mySub.feedback?.substring(0,30)||'—'}</span>`:''}
+              ${mode==='teacher'?`<button class="btn btn-ol btn-xs" onclick="gradeModal(${a.id})">Grade</button><button class="btn btn-r btn-xs" onclick="delAssign(${a.id})">Del</button>`:''}
+              ${mode==='admin'?`<button class="btn btn-r btn-xs" onclick="delAssign(${a.id})">Del</button>`:''}
+            </div></td>
+          </tr>`;
+        }).join('')||`<tr><td colspan="6">${emptyState('📋','No assignments found')}</td></tr>`}
+      </tbody></table>
+    </div>`;
+}
+function addAssignModal(){
+  const mc=DB.courses.filter(c=>c.instructor===CU.id);
+  openM('Post New Assignment',`
+    <div class="fgroup"><label class="flabel">Title *</label><input class="finput" id="at"></div>
+    <div class="fgroup"><label class="flabel">Description</label><textarea class="finput" id="ad"></textarea></div>
+    <div class="fgroup"><label class="flabel">Course *</label><select class="finput" id="ac">${mc.map(c=>`<option value="${c.id}">${c.title} (${c.code})</option>`).join('')}</select></div>
+    <div class="g2">
+      <div class="fgroup"><label class="flabel">Due Date</label><input class="finput" id="adu" type="date" value="${new Date(Date.now()+7*86400000).toISOString().split('T')[0]}"></div>
+      <div class="fgroup"><label class="flabel">Max Marks</label><input class="finput" id="am" type="number" value="100" min="1"></div>
+    </div>
+  `,[{l:'Cancel',c:'btn-ol',fn:'closeM()'},{l:'Post Assignment',c:'btn-g',fn:'saveAssign()'}]);
+}
+function saveAssign(){
+  const t=$('at').value.trim();
+  if(!t)return toast('Title required','err');
+  const a={id:DB.nids.assign++,cid:parseInt($('ac').value),title:t,desc:$('ad').value||'Complete the assignment.',due:$('adu').value,max:parseInt($('am').value)||100,by:CU.id,subs:[]};
+  DB.assignments.push(a);
+  const c=DB.courses.find(c=>c.id===a.cid);
+  c?.students.forEach(sid=>{DB.notifs.push({id:DB.nids.notif++,uid:sid,title:'New Assignment 📋',msg:`"${t}" posted in ${c.title}`,time:'Just now',read:false,type:'assign'})});
+  save(); closeM(); renderAssign('teacher'); toast('Assignment posted!');
+}
+function submitModal(aid){
+  openM('Submit Assignment',`
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Upload your completed work. Enter the filename as it will appear.</p>
+    <div class="fgroup"><label class="flabel">File / Document Name</label><input class="finput" id="sf" placeholder="e.g. naveen_assignment.pdf"></div>
+    <div style="border:2px dashed var(--border);border-radius:8px;padding:20px;text-align:center;color:var(--text2);font-size:13px;margin-top:8px">📎 File upload simulated for offline demo</div>
+  `,[{l:'Cancel',c:'btn-ol',fn:'closeM()'},{l:'Submit',c:'btn-g',fn:`confirmSub(${aid})`}]);
+}
+function confirmSub(aid){
+  const file=$('sf').value.trim()||'submission.pdf';
+  const a=DB.assignments.find(a=>a.id===aid);
+  if(!a)return;
+  a.subs.push({sid:CU.id,file,on:new Date().toISOString().split('T')[0],grade:null,fb:'',graded:false});
+  const c=DB.courses.find(c=>c.id===a.cid);
+  DB.notifs.push({id:DB.nids.notif++,uid:a.by,title:'New Submission 📤',msg:`${CU.name} submitted "${a.title}"`,time:'Just now',read:false,type:'sub'});
+  save(); closeM(); renderAssign('student'); toast('Submitted successfully! ✅');
+}
+function gradeModal(aid){
+  const a=DB.assignments.find(a=>a.id===aid);
+  if(!a){toast('Assignment not found','err');return}
+  if(!a.subs.length){toast('No submissions yet','warn');return}
+  openM(`Grade: ${a.title}`,
+    `<div style="font-size:13px;color:var(--text2);margin-bottom:14px">${a.subs.length} submission(s) &nbsp;|&nbsp; Max: ${a.max} marks</div>`+
+    a.subs.map((s,i)=>{
+      const u=DB.users.find(u=>u.id===s.sid);
+      return`<div style="border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:10px">
+        <div class="flex-b" style="margin-bottom:8px">
+          <div class="flex-g">${av(u||{avatar:'#9CA3AF',name:'?'},28)}<div><div style="font-weight:600;font-size:13px">${u?.name||'Unknown'}</div><div style="font-size:11px;color:var(--text2)">File: ${s.file}</div></div></div>
+          ${s.graded?`<span class="bg bg-g">${s.grade}/${a.max}</span>`:'<span class="bg bg-a">Pending</span>'}
+        </div>
+        ${s.graded?`<div style="font-size:12px;color:var(--text2);font-style:italic">${s.fb||'No feedback'}</div>`:`
+          <div class="g2" style="gap:8px">
+            <input class="finput" id="gm${i}" type="number" placeholder="Marks (max ${a.max})" max="${a.max}" min="0">
+            <input class="finput" id="gf${i}" placeholder="Feedback…">
+          </div>
+          <button class="btn btn-g btn-sm" style="margin-top:8px" onclick="saveGrade(${aid},${s.sid},${i})">Save Grade</button>`}
+      </div>`;
+    }).join(''),
+    [{l:'Close',c:'btn-ol',fn:'closeM()'}]
+  );
+}
+function saveGrade(aid,sid,i){
+  const m=parseInt($(`gm${i}`)?.value);
+  const fb=$(`gf${i}`)?.value.trim()||'';
+  if(isNaN(m)||m<0)return toast('Enter valid marks','err');
+  const a=DB.assignments.find(a=>a.id===aid);
+  const sub=a.subs.find(s=>s.sid===sid);
+  if(sub){sub.grade=m;sub.fb=fb;sub.graded=true}
+  DB.notifs.push({id:DB.nids.notif++,uid:sid,title:'Assignment Graded 🏆',msg:`"${a.title}" graded: ${m}/${a.max}. ${fb}`,time:'Just now',read:false,type:'grade'});
+  save(); gradeModal(aid); toast('Grade saved! 🏆');
+}
+function delAssign(id){
+  if(!confirm('Delete this assignment?'))return;
+  DB.assignments=DB.assignments.filter(a=>a.id!==id);
+  save(); go(CU.role==='Admin'?'allassign':CU.role==='Instructor'?'tchassign':'stuassign'); toast('Deleted','warn');
+}
+
+// ─── QUIZZES (Teacher) ────────────────────────────────────
+PAGES.tchquiz=()=>{
+  const mc=DB.courses.filter(c=>c.instructor===CU.id);
+  const mq=DB.quizzes.filter(q=>mc.some(c=>c.id===q.cid));
+  pc().innerHTML=`
+    <div class="flex-b"><div class="page-hd" style="margin-bottom:0"><h2>Quizzes</h2></div><button class="btn btn-g" onclick="createQuizModal()">+ Create Quiz</button></div>
+    <div class="card" style="margin-top:16px">
+      <table class="tbl"><thead><tr><th>Quiz</th><th>Course</th><th>Questions</th><th>Time</th><th>Attempts</th><th>Action</th></tr></thead><tbody>
+        ${mq.map(q=>{
+          const c=DB.courses.find(c=>c.id===q.cid);
+          return`<tr><td style="font-weight:600">${q.title}</td><td>${c?`<span class="bg bg-p">${c.code}</span>`:'—'}</td><td>${q.qs.length}</td><td>${q.time}s</td><td>${q.attempts.length}</td><td><button class="btn btn-r btn-xs" onclick="delQuiz(${q.id})">Delete</button></td></tr>`;
+        }).join('')||`<tr><td colspan="6">${emptyState('❓','No quizzes yet')}</td></tr>`}
+      </tbody></table>
+    </div>`;
+};
+function createQuizModal(){
+  const mc=DB.courses.filter(c=>c.instructor===CU.id);
+  openM('Create Quiz',`
+    <div class="fgroup"><label class="flabel">Quiz Title *</label><input class="finput" id="qt"></div>
+    <div class="fgroup"><label class="flabel">Course *</label><select class="finput" id="qc">${mc.map(c=>`<option value="${c.id}">${c.title}</option>`).join('')}</select></div>
+    <div class="fgroup"><label class="flabel">Time Limit (seconds)</label><input class="finput" id="qtm" type="number" value="120" min="30"></div>
+    <p style="font-size:12px;color:var(--text2)">A sample quiz with 4 standard questions will be created. Questions can be customized later.</p>
+  `,[{l:'Cancel',c:'btn-ol',fn:'closeM()'},{l:'Create Quiz',c:'btn-g',fn:'saveQuiz()'}]);
+}
+function saveQuiz(){
+  const t=$('qt').value.trim();
+  if(!t)return toast('Enter quiz title','err');
+  DB.quizzes.push({id:DB.nids.quiz++,cid:parseInt($('qc').value),title:t,by:CU.id,time:parseInt($('qtm').value)||120,qs:[
+    {q:'What is the primary purpose of this course module?',opts:['Entertainment','Learning new skills','Passing time','Social media'],ans:1},
+    {q:'Which technology is used in this course?',opts:['None','Basic tools','Advanced web/programming tools','Mobile apps only'],ans:2},
+    {q:'How should assignments be submitted?',opts:['By email','Via the portal','By hand','Not required'],ans:1},
+    {q:'What is the benefit of completing all lectures?',opts:['No benefit','Full progress completion','Extra marks','Certificate'],ans:1},
+  ],attempts:[]});
+  save(); closeM(); PAGES.tchquiz(); toast('Quiz created!');
+}
+function delQuiz(id){
+  if(!confirm('Delete quiz?'))return;
+  DB.quizzes=DB.quizzes.filter(q=>q.id!==id);
+  save(); PAGES.tchquiz(); toast('Deleted','warn');
+}
+
+// ─── QUIZZES (Student) ────────────────────────────────────
+PAGES.stuquiz=()=>{
+  const cids=DB.courses.filter(c=>c.students.includes(CU.id)).map(c=>c.id);
+  const avail=DB.quizzes.filter(q=>cids.includes(q.cid));
+  pc().innerHTML=`<div class="page-hd"><h2>Available Quizzes</h2><p>${avail.length} quizzes available</p></div><div class="g-auto">${avail.map(q=>{
+    const c=DB.courses.find(c=>c.id===q.cid);
+    const att=q.attempts.find(a=>a.sid===CU.id);
+    return`<div class="card" style="padding:18px">
+      <div style="font-size:32px;margin-bottom:10px">❓</div>
+      <div style="font-weight:700;font-size:15px;margin-bottom:6px">${q.title}</div>
+      <span class="bg bg-p" style="margin-bottom:10px;display:inline-block">${c?.code||'—'}</span>
+      <p style="font-size:12px;color:var(--text2);margin-bottom:12px">${q.qs.length} questions &nbsp;•&nbsp; ${q.time}s time limit</p>
+      ${att?`<div class="bg bg-g" style="margin-bottom:10px;display:inline-block">Score: ${att.score}/${att.total} (${Math.round(att.score/att.total*100)}%)</div><br>`:''}
+      <button class="btn ${att?'btn-ol':'btn-g'} btn-sm" style="width:100%;justify-content:center" onclick="startQuiz(${q.id})">${att?'Reattempt Quiz':'Start Quiz'}</button>
+    </div>`;
+  }).join('')||emptyState('❓','No quizzes available yet')}`;
+};
+
+let curQid=null,qAns={},qTimer=null,qLeft=0;
+function startQuiz(id){curQid=id;go('quizattempt')}
+
+PAGES.quizattempt=()=>{
+  const q=DB.quizzes.find(q=>q.id===curQid);
+  if(!q){pc().innerHTML=emptyState('❓','Quiz not found');return}
+  qAns={}; qLeft=q.time;
+  pc().innerHTML=`
+    <div style="max-width:700px;margin:0 auto">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+        <div class="page-hd" style="margin:0"><h2>${q.title}</h2><p>${q.qs.length} questions</p></div>
+        <div class="qtimer" id="ql">⏱ ${q.time}s</div>
+      </div>
+      <div id="qqq">
+        ${q.qs.map((qu,i)=>`<div class="card" style="margin-bottom:14px">
+          <div class="card-bd">
+            <div style="font-weight:600;font-size:14px;margin-bottom:12px">Q${i+1}: ${qu.q}</div>
+            ${qu.opts.map((o,oi)=>`<div class="qopt" id="o${i}_${oi}" onclick="pickAns(${i},${oi},${qu.opts.length})"><span style="width:24px;height:24px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0">${String.fromCharCode(65+oi)}</span>${o}</div>`).join('')}
+          </div>
+        </div>`).join('')}
+      </div>
+      <button class="btn btn-g" style="width:100%;justify-content:center;padding:12px;font-size:14px;margin-top:6px" onclick="submitQuiz()">Submit Quiz →</button>
+    </div>`;
+  qTimer=setInterval(()=>{
+    qLeft--;
+    const el=$('ql');
+    if(el){el.textContent='⏱ '+qLeft+'s';if(qLeft<=10)el.style.color='var(--r)'}
+    if(qLeft<=0){clearInterval(qTimer);submitQuiz()}
+  },1000);
+};
+function pickAns(qi,oi,n){
+  qAns[qi]=oi;
+  for(let i=0;i<n;i++){const el=$(`o${qi}_${i}`);if(el)el.classList.toggle('sel',i===oi)}
+}
+function submitQuiz(){
+  clearInterval(qTimer);
+  const q=DB.quizzes.find(q=>q.id===curQid);
+  let score=0;
+  q.qs.forEach((qu,i)=>{if(qAns[i]===qu.ans)score++});
+  const pct=Math.round(score/q.qs.length*100);
+  q.attempts=q.attempts.filter(a=>a.sid!==CU.id);
+  q.attempts.push({sid:CU.id,score,total:q.qs.length,on:new Date().toISOString().split('T')[0]});
+  save();
+  pc().innerHTML=`<div style="max-width:580px;margin:0 auto;text-align:center;padding:40px 20px">
+    <div style="font-size:72px;margin-bottom:16px">${pct>=75?'🏆':pct>=50?'📚':'💪'}</div>
+    <h2 style="font-size:26px;font-weight:700;margin-bottom:6px">${pct>=50?'Well Done!':'Keep Trying!'}</h2>
+    <div style="width:110px;height:110px;border-radius:50%;border:8px solid ${pct>=75?'var(--g)':pct>=50?'var(--a)':'var(--r)'};display:flex;flex-direction:column;align-items:center;justify-content:center;margin:20px auto">
+      <div style="font-size:26px;font-weight:700;color:${pct>=75?'var(--g)':pct>=50?'var(--a)':'var(--r)'}">${pct}%</div>
+      <div style="font-size:12px;color:var(--text2)">${score}/${q.qs.length}</div>
+    </div>
+    <p style="font-size:14px;color:var(--text2);margin-bottom:24px">${pct>=75?'Excellent! You scored above 75%.':pct>=50?'Good effort! You passed.':'Study the material and try again.'}</p>
+    <div class="card" style="text-align:left;margin-bottom:20px">
+      <div class="card-bd">
+        ${q.qs.map((qu,i)=>`<div style="margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)">
+          <div style="font-weight:500;font-size:13px;margin-bottom:8px">Q${i+1}: ${qu.q}</div>
+          ${qu.opts.map((o,oi)=>`<div style="padding:5px 10px;border-radius:5px;font-size:12px;margin-bottom:3px;${oi===qu.ans?'background:#DCFCE7;color:#166534;font-weight:500':qAns[i]===oi&&oi!==qu.ans?'background:var(--rbg);color:var(--r)':''}">${String.fromCharCode(65+oi)}. ${o}${oi===qu.ans?' ✓':''}</div>`).join('')}
+        </div>`).join('')}
+      </div>
+    </div>
+    <button class="btn btn-g" onclick="go('stuquiz')">← Back to Quizzes</button>
+  </div>`;
+}
+
+// ─── GRADING (Teacher) ────────────────────────────────────
+PAGES.grading=()=>{
+  const mc=DB.courses.filter(c=>c.instructor===CU.id);
+  const ma=DB.assignments.filter(a=>mc.some(c=>c.id===a.cid));
+  pc().innerHTML=`<div class="page-hd"><h2>Grade Submissions</h2><p>Review and grade student work</p></div>`+
+    ma.map(a=>{
+      const c=DB.courses.find(c=>c.id===a.cid);
+      return`<div class="card" style="margin-bottom:16px">
+        <div class="card-hd"><h3>${a.title} <span class="bg bg-p" style="margin-left:8px">${c?.code||'—'}</span></h3><span style="font-size:12px;color:var(--text2)">${a.subs.length} subs &nbsp;•&nbsp; ${a.subs.filter(s=>s.graded).length} graded</span></div>
+        ${a.subs.length===0?`<div class="card-bd">${emptyState('📭','No submissions yet')}</div>`:
+        `<table class="tbl"><thead><tr><th>Student</th><th>File</th><th>Submitted</th><th>Status</th><th>Action</th></tr></thead><tbody>
+          ${a.subs.map(s=>{
+            const u=DB.users.find(u=>u.id===s.sid);
+            return`<tr><td style="font-weight:500">${u?.name||'Unknown'}</td><td style="font-size:12px;color:var(--text2)">${s.file}</td><td style="font-size:12px">${fmt(s.on)}</td><td>${s.graded?`<span class="bg bg-g">${s.grade}/${a.max}</span>`:'<span class="bg bg-a">Pending</span>'}</td><td><button class="btn btn-ol btn-xs" onclick="gradeModal(${a.id})">${s.graded?'Re-grade':'Grade'}</button></td></tr>`;
+          }).join('')}
+        </tbody></table>`}
+      </div>`;
+    }).join('')||`<div class="card"><div class="card-bd">${emptyState('📋','No assignments posted yet')}</div></div>`;
+};
+
+// ─── GRADES (Student) ─────────────────────────────────────
+PAGES.grades=()=>{
+  const cids=DB.courses.filter(c=>c.students.includes(CU.id)).map(c=>c.id);
+  const graded=DB.assignments.filter(a=>cids.includes(a.cid)).flatMap(a=>a.subs.filter(s=>s.sid===CU.id&&s.graded).map(s=>({...s,a})));
+  const avg=graded.length?Math.round(graded.reduce((sum,g)=>sum+Math.round(g.grade/g.a.max*100),0)/graded.length):0;
+  const letter=avg>=90?'O':avg>=80?'A+':avg>=70?'A':avg>=60?'B+':avg>=50?'B':avg>0?'F':'—';
+  pc().innerHTML=`
+    <div class="page-hd"><h2>My Grades</h2></div>
+    <div class="mgrid">
+      ${metric('📤','Submitted',DB.assignments.filter(a=>cids.includes(a.cid)&&a.subs.find(s=>s.sid===CU.id)).length,'#E1F5EE','#0F6E56')}
+      ${metric('✅','Graded',graded.length,'#EEEDFE','#534AB7')}
+      ${metric('📊','Avg Score',avg?avg+'%':'—',avg>=75?'#DCFCE7':avg>=50?'#FEF3C7':'#E6F1FB',avg>=75?'#166534':avg>=50?'#92400E':'#185FA5')}
+      ${metric('🏆','Grade',letter,avg>=75?'#E1F5EE':avg>=50?'#FAEEDA':'#FCEBEB',avg>=75?'#0F6E56':avg>=50?'#B45309':'#B91C1C')}
+    </div>
+    <div class="card">
+      <div class="card-hd"><h3>Grade Details</h3></div>
+      <table class="tbl"><thead><tr><th>Assignment</th><th>Course</th><th>Score</th><th>Percentage</th><th>Feedback</th></tr></thead><tbody>
+        ${graded.length?graded.map(g=>{
+          const pct=Math.round(g.grade/g.a.max*100);
+          const c=DB.courses.find(c=>c.id===g.a.cid);
+          return`<tr>
+            <td style="font-weight:600">${g.a.title}</td>
+            <td>${c?`<span class="bg bg-p">${c.code}</span>`:'—'}</td>
+            <td><span class="bg ${pct>=75?'bg-g':pct>=50?'bg-a':'bg-r'}">${g.grade}/${g.a.max}</span></td>
+            <td><div style="display:flex;align-items:center;gap:8px">${progBar(pct,pct>=75?'var(--g)':pct>=50?'var(--a)':'var(--r)')}<span style="font-size:12px;font-weight:600;white-space:nowrap">${pct}%</span></div></td>
+            <td style="font-size:12px;color:var(--text2);font-style:italic">${g.fb||'No feedback'}</td>
+          </tr>`;
+        }).join(''):`<tr><td colspan="5">${emptyState('🏆','No grades yet — submit assignments to get graded')}</td></tr>`}
+      </tbody></table>
+    </div>`;
+};
+
+// ─── ANNOUNCEMENTS ────────────────────────────────────────
+PAGES.announce=()=>{
+  const anns=DB.announcements.filter(a=>a.target==='all'||a.target===CU.role);
+  pc().innerHTML=`
+    <div class="flex-b">
+      <div class="page-hd" style="margin-bottom:0"><h2>Announcements</h2><p>${anns.length} announcements</p></div>
+      ${CU.role!=='Student'?`<button class="btn btn-g" onclick="addAnnModal()">+ New Announcement</button>`:''}
+    </div>
+    <div style="margin-top:16px">
+      ${anns.length?anns.reverse().map(a=>{
+        const by=DB.users.find(u=>u.id===a.by);
+        return`<div class="card" style="margin-bottom:12px">
+          <div class="card-hd"><h3>${a.title}</h3><div class="flex-g"><span class="bg bg-p" style="font-size:10px">${a.target==='all'?'Everyone':a.target}</span><span style="font-size:11px;color:var(--text2)">${fmt(a.date)}</span></div></div>
+          <div class="card-bd">
+            <p style="font-size:13px;color:var(--text2);line-height:1.7">${a.msg}</p>
+            <div style="margin-top:10px;font-size:11px;color:var(--text3)">Posted by: ${by?.name||'System'}</div>
+          </div>
+        </div>`;
+      }).join(''):`<div class="card"><div class="card-bd">${emptyState('📢','No announcements yet')}</div></div>`}
+    </div>`;
+};
+function addAnnModal(){
+  openM('New Announcement',`
+    <div class="fgroup"><label class="flabel">Title *</label><input class="finput" id="ant"></div>
+    <div class="fgroup"><label class="flabel">Message *</label><textarea class="finput" id="anm" placeholder="Write your announcement…"></textarea></div>
+    <div class="fgroup"><label class="flabel">Target Audience</label><select class="finput" id="ana"><option value="all">Everyone</option><option>Student</option><option>Instructor</option></select></div>
+  `,[{l:'Cancel',c:'btn-ol',fn:'closeM()'},{l:'Post',c:'btn-g',fn:'saveAnn()'}]);
+}
+function saveAnn(){
+  const t=$('ant').value.trim(),m=$('anm').value.trim();
+  if(!t||!m)return toast('Title and message required','err');
+  DB.announcements.push({id:DB.nids.ann++,title:t,msg:m,by:CU.id,date:new Date().toISOString().split('T')[0],target:$('ana').value});
+  save(); closeM(); PAGES.announce(); toast('Announcement posted!');
+}
+
+// ─── REPORTS (Admin) ──────────────────────────────────────
+PAGES.reports=()=>{
+  const stus=DB.users.filter(u=>u.role==='Student');
+  pc().innerHTML=`
+    <div class="page-hd"><h2>Reports & Analytics</h2></div>
+    <div class="g3" style="margin-bottom:18px">
+      ${metric('👥','Total Users',DB.users.length,'#E6F1FB','#185FA5')}
+      ${metric('📚','Courses',DB.courses.length,'#EEEDFE','#534AB7')}
+      ${metric('📋','Assignments',DB.assignments.length,'#FAEEDA','#B45309')}
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-hd"><h3>Student Performance Report</h3></div>
+      <table class="tbl"><thead><tr><th>Student</th><th>Courses</th><th>Submissions</th><th>Graded</th><th>Avg Score</th><th>Overall Grade</th></tr></thead><tbody>
+        ${stus.map(s=>{
+          const crs=DB.courses.filter(c=>c.students.includes(s.id));
+          const graded=DB.assignments.flatMap(a=>a.subs.filter(sub=>sub.sid===s.id&&sub.graded));
+          const avg=graded.length?Math.round(graded.reduce((sm,g)=>{const a=DB.assignments.find(a=>a.subs.includes(g));return sm+(a?Math.round(g.grade/a.max*100):0)},0)/graded.length):null;
+          const letter=!avg?'—':avg>=90?'O':avg>=80?'A+':avg>=70?'A':avg>=60?'B+':avg>=50?'B':'F';
+          return`<tr><td><div class="flex-g">${av(s,28)}<div><div style="font-weight:600">${s.name}</div><div style="font-size:11px;color:var(--text2)">${s.email}</div></div></div></td><td>${crs.length}</td><td>${DB.assignments.flatMap(a=>a.subs.filter(sub=>sub.sid===s.id)).length}</td><td>${graded.length}</td><td>${avg?avg+'%':'—'}</td><td><span class="bg ${avg&&avg>=50?'bg-g':'bg-r'}">${letter}</span></td></tr>`;
+        }).join('')}
+      </tbody></table>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div class="card-hd"><h3>Course Enrollment Stats</h3></div>
+        <div class="card-bd">
+          ${DB.courses.map(c=>`<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:13px;font-weight:500">${c.title}</span><span style="font-size:12px;font-weight:600;color:var(--g)">${c.students.length}</span></div>${progBar(Math.round(c.students.length/Math.max(...DB.courses.map(x=>x.students.length),1)*100))}<div style="font-size:10px;color:var(--text2);margin-top:2px">${c.students.length} students enrolled</div></div>`).join('')}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd"><h3>Assignment Completion Rates</h3></div>
+        <div class="card-bd">
+          ${DB.assignments.map(a=>{const r=DB.courses.find(c=>c.id===a.cid);const pct=r?.students.length?Math.round(a.subs.length/r.students.length*100):0;return`<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px"><span style="font-size:12px;font-weight:500">${a.title.substring(0,30)}…</span><span style="font-size:11px;color:var(--text2)">${pct}%</span></div>${progBar(pct)}</div>`}).join('')}
+        </div>
+      </div>
+    </div>`;
+};
+
+// ─── WPR SUMMARY ──────────────────────────────────────────
+PAGES.wpr=()=>{
+  const wprs=[
+    {n:1,wk:'08/12 – 14/12/2025',task:'Studied ELMS concepts, analyzed existing LMS platforms, identified stakeholders (Admin, Teacher, Student), collected requirements, prepared synopsis.',learn:'Understood LMS workflows, requirement analysis, project planning.'},
+    {n:2,wk:'15/12 – 21/12/2025',task:'Studied LMS architecture, analyzed features, identified key modules: User, Course, Content Management, prepared system workflow.',learn:'Developed understanding of LMS structure and module interaction.'},
+    {n:3,wk:'22/12 – 28/12/2025',task:'Designed database schema for users/courses/content, finalized modules and roles, studied frontend/backend technologies, initiated authentication module.',learn:'Gained practical understanding of database design and role-based access.'},
+    {n:4,wk:'29/12/2025 – 04/01/2026',task:'Implemented user registration/login, applied role-based access control (Admin/Student), designed frontend pages (login, dashboard), tested authentication.',learn:'Hands-on experience with JWT authentication, frontend-backend integration.'},
+    {n:5,wk:'05/01 – 11/01/2026',task:'Developed course management module, implemented add/update/view functionality, designed course listing interfaces, integrated database operations.',learn:'CRUD operations, backend logic with frontend interfaces.'},
+    {n:6,wk:'12/01 – 18/01/2026',task:'Developed assignment module, implemented creation/submission/review, integrated file upload/download, tested assignment workflows.',learn:'File handling, student-teacher interaction modules.'},
+    {n:7,wk:'19/01 – 25/01/2026',task:'Designed grading module, implemented evaluation/feedback for teachers, integrated grade visibility for students, enhanced teacher dashboard.',learn:'Grading workflows, evaluation data handling, role-based access.'},
+    {n:8,wk:'26/01 – 01/02/2026',task:'Improved teacher dashboard UI, refined assignment tracking, fixed bugs in grading/feedback sections, tested system modules.',learn:'UI improvement, debugging, student-teacher interaction modules.'},
+    {n:9,wk:'02/02 – 08/02/2026',task:'Improved existing modules, tested grading/assignment/feedback features, optimized dashboard performance, fixed data display bugs.',learn:'System integration, performance optimization, data validation.'},
+    {n:10,wk:'09/02 – 15/02/2026',task:'Detailed testing of student/teacher dashboards, fixed assignment submission bugs, improved system validation, updated documentation.',learn:'Testing/debugging real-time web modules, dashboard performance.'},
+    {n:11,wk:'16/02 – 22/02/2026',task:'Implemented report generation features, developed student performance/assignment reports, improved dashboard visualization, performed integration testing.',learn:'Reporting features, system integration, data flow between modules.'},
+    {n:12,wk:'23/02 – 01/03/2026',task:'Implemented role-based auth/authorization, enhanced security (input validation, session management), optimized database queries, conducted full testing.',learn:'Authentication, role-based access control, database optimization.'},
+    {n:13,wk:'02/03 – 08/03/2026',task:'Final system testing for all modules, verified course/assignment/grading/reporting, resolved bugs, reviewed security, prepared documentation and presentation.',learn:'Final testing, deployment preparation, security verification.'},
+    {n:14,wk:'09/03 – 15/03/2026',task:'Final review of all LMS modules, verified functioning, minor improvements from feedback, finalized documentation and user guidelines, prepared final report.',learn:'Reviewing and finalizing software project, system evaluation.'},
+    {n:15,wk:'16/03 – 22/03/2026',task:'Completed final review, submitted project report and documentation, verified all modules, prepared presentation and demonstration materials.',learn:'Completing and submitting full software development project.'},
+    {n:16,wk:'23/03 – 29/03/2026',task:'Set up project environment and repository, organized backend/frontend code structure, implemented basic API endpoints, integrated database connection.',learn:'Project setup, API development, backend architecture.'},
+    {n:17,wk:'30/03 – 05/04/2026',task:'Implemented student registration/login, integrated authentication mechanism, developed user profile management, tested login/registration modules.',learn:'Authentication systems, user management, validation practices.'},
+    {n:18,wk:'06/04 – 12/04/2026',task:'Implemented course enrollment functionality, developed features for viewing enrolled courses, integrated course data with student dashboard.',learn:'Relational data features, student-course interaction modules.'},
+    {n:19,wk:'13/04 – 19/04/2026',task:'Added notification system for assignments/announcements, improved dashboard interface, implemented message alerts, tested notification modules.',learn:'Notification systems, UI/UX development, real-time user interaction.'},
+    {n:20,wk:'20/04 – 26/04/2026',task:'Conducted complete system testing for all LMS modules, verified student/teacher/admin functionalities, fixed remaining bugs, optimized database queries.',learn:'System testing, debugging, performance optimization, reliability.'},
+    {n:21,wk:'27/04 – 01/05/2026',task:'Deployed E-Learning Management System in testing environment, verified performance and stability, prepared final demonstration and presentation, completed project documentation.',learn:'Deployment, project lifecycle, documentation standards.'},
+  ];
+  pc().innerHTML=`
+    <div class="page-hd"><h2>Weekly Progress Report Summary</h2><p>21 WPRs covering 145 days of internship (08/12/2025 – 01/05/2026)</p></div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="card-hd">
+        <div><div style="font-size:13px;font-weight:600">Student: Naveen Gupta &nbsp;|&nbsp; Enrollment: A418145024009</div><div style="font-size:12px;color:var(--text2)">Programme: MCA &nbsp;|&nbsp; Faculty Guide: Dr. Akanksha Singh &nbsp;|&nbsp; Company: Amity University Greater Noida</div></div>
+        <span class="bg bg-g">145 Days</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="tbl"><thead><tr><th>WPR</th><th>Week</th><th>Tasks Completed</th><th>Learning Outcomes</th></tr></thead><tbody>
+          ${wprs.map(w=>`<tr><td><div style="width:28px;height:28px;background:var(--gbg);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--g)">${w.n}</div></td><td style="font-size:12px;white-space:nowrap;color:var(--text2)">${w.wk}</td><td style="font-size:12px;max-width:320px">${w.task}</td><td style="font-size:12px;color:var(--text2);max-width:240px">${w.learn}</td></tr>`).join('')}
+        </tbody></table>
+      </div>
+    </div>`;
+};
+
+// ─── NOTIFICATIONS ────────────────────────────────────────
+PAGES.notifs=()=>{
+  const mine=DB.notifs.filter(n=>n.uid===CU.id);
+  const unread=mine.filter(n=>!n.read).length;
+  const typeIco={grade:'🏆',assign:'📋',quiz:'❓',sub:'📤',enroll:'🎓',sys:'⚙️'};
+  pc().innerHTML=`
+    <div class="flex-b">
+      <div class="page-hd" style="margin-bottom:0"><h2>Notifications</h2><p>${unread} unread</p></div>
+      ${unread>0?`<button class="btn btn-ol btn-sm" onclick="markAllRead()">✓ Mark all read</button>`:''}
+    </div>
+    <div class="card" style="margin-top:16px">
+      ${mine.length?mine.slice().reverse().map(n=>`
+        <div style="display:flex;gap:13px;padding:13px 18px;border-bottom:1px solid var(--border);background:${n.read?'#fff':'#FAFFFE'};cursor:pointer" onclick="readNotif(${n.id})">
+          <div style="width:9px;height:9px;border-radius:50%;background:${n.read?'#D1D5DB':'var(--g)'};flex-shrink:0;margin-top:5px"></div>
+          <div style="flex:1">
+            <div style="font-size:13px;font-weight:${n.read?500:600}">${n.title}</div>
+            <div style="font-size:12px;color:var(--text2);margin-top:3px">${n.msg}</div>
+            <div style="font-size:11px;color:var(--text3);margin-top:4px">${n.time}</div>
+          </div>
+          <div style="font-size:20px">${typeIco[n.type]||'📬'}</div>
+        </div>`).join(''):emptyState('🔔','No notifications')}
+    </div>`;
+};
+function readNotif(id){
+  const n=DB.notifs.find(n=>n.id===id);
+  if(n)n.read=true;
+  save(); PAGES.notifs(); buildNav();
+}
+function markAllRead(){
+  DB.notifs.filter(n=>n.uid===CU.id).forEach(n=>n.read=true);
+  save(); PAGES.notifs(); buildNav(); toast('All marked as read ✓');
+}
+
+// ─── PROFILE ──────────────────────────────────────────────
+PAGES.profile=()=>{
+  const rc={Admin:'#534AB7',Instructor:'#B45309',Student:'#0F6E56'};
+  pc().innerHTML=`
+    <div class="page-hd"><h2>My Profile</h2></div>
+    <div class="g2">
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-bd" style="text-align:center">
+            <div class="av" style="background:${CU.avatar};width:80px;height:80px;font-size:28px;margin:0 auto 14px">${init(CU.name)}</div>
+            <h3 style="font-size:18px;margin-bottom:5px">${CU.name}</h3>
+            <p style="color:var(--text2);font-size:13px;margin-bottom:10px">${CU.email}</p>
+            <span class="rpill" style="background:${rc[CU.role]}22;color:${rc[CU.role]}">${CU.role}</span>
+          </div>
+          <div style="padding:0 18px 18px">
+            ${[['Enrollment No','A418145024009'],['Programme','MCA'],['University','Amity University, Greater Noida'],['Faculty Guide','Dr. Akanksha Singh'],['Project','E-Learning Management System'],['Duration','145 Days (08/12/2025 – 01/05/2026)']].map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;color:var(--text2)">${k}</span><span style="font-size:12px;font-weight:500;text-align:right;max-width:55%">${v}</span></div>`).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><h3>Tech Stack</h3></div>
+          <div class="card-bd">
+            ${[['🌐','Frontend','HTML5, CSS3, Bootstrap 5, JavaScript'],['🟢','Backend (MERN)','Node.js + Express.js REST API'],['🍃','Database','MongoDB + Mongoose ODM'],['⚛️','Framework','React.js (for full stack version)'],['🔐','Security','JWT + bcrypt Password Hashing'],['☕','Java Service','Spring Boot + Apache POI'],['📊','Reporting','Chart.js + Custom Analytics'],].map(([i,k,v])=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:20px">${i}</span><div><div style="font-size:12px;font-weight:600">${k}</div><div style="font-size:11px;color:var(--text2)">${v}</div></div></div>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hd"><h3>Change Password</h3></div>
+          <div class="card-bd">
+            <div class="fgroup"><label class="flabel">Current Password</label><input class="finput" id="cp1" type="password" placeholder="Enter current password"></div>
+            <div class="fgroup"><label class="flabel">New Password</label><input class="finput" id="cp2" type="password" placeholder="Min 6 characters"></div>
+            <div class="fgroup"><label class="flabel">Confirm New Password</label><input class="finput" id="cp3" type="password" placeholder="Repeat new password"></div>
+            <button class="btn btn-g" onclick="changePass()">Update Password</button>
+          </div>
+        </div>
+        <div class="card" style="margin-bottom:16px">
+          <div class="card-hd"><h3>WPR Modules Completed</h3></div>
+          <div class="card-bd">
+            ${[['Auth & Login','WPR 3-4','bg-g'],['Course Management','WPR 5','bg-g'],['Assignment Module','WPR 6','bg-g'],['Grading & Feedback','WPR 7-8','bg-g'],['Testing & Optimization','WPR 9-10','bg-g'],['Report Generation','WPR 11','bg-g'],['Security & DB Opt.','WPR 12','bg-g'],['Final Testing','WPR 13-14','bg-g'],['Notifications','WPR 19','bg-g'],['Deployment','WPR 21','bg-g'],].map(([f,w,c])=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--border)"><span style="font-size:12px;font-weight:500">✅ ${f}</span><span class="bg ${c}" style="font-size:10px">${w}</span></div>`).join('')}
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd"><h3>Reset Demo Data</h3></div>
+          <div class="card-bd">
+            <p style="font-size:12px;color:var(--text2);margin-bottom:12px">Reset all data to the original demo state. This will remove any changes you made.</p>
+            <button class="btn btn-r btn-sm" onclick="resetData()">⚠ Reset to Demo Data</button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+};
+function changePass(){
+  const c=$('cp1').value,n=$('cp2').value,r=$('cp3').value;
+  if(!c||!n||!r)return toast('All fields required','err');
+  if(c!==CU.pass)return toast('Current password incorrect','err');
+  if(n!==r)return toast('Passwords do not match','err');
+  if(n.length<6)return toast('Minimum 6 characters','err');
+  const u=DB.users.find(u=>u.id===CU.id);
+  u.pass=n; CU.pass=n; save(); toast('Password updated! 🔐');
+}
+function resetData(){
+  if(!confirm('Reset ALL data to demo state? This cannot be undone.'))return;
+  localStorage.removeItem(SK); DB=mkDB(); save(); doLogout(); toast('Data reset. Please login again.');
+}
+
+// ════════════════════════════════════════════════════════
+//  RESPONSIVE
+// ════════════════════════════════════════════════════════
+window.addEventListener('resize',()=>{
+  const ham=$('ham');
+  if(ham) ham.style.display=window.innerWidth<=768?'block':'none';
+});
+if(window.innerWidth<=768){const ham=$('ham');if(ham)ham.style.display='block'}
+</script>
+</body>
+</html>
