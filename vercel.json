@@ -2,22 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "ELMS_MajorProject_NaveenGupta.html",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "styles.css",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "app.js",
+      "src": "index.html",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/",
-      "dest": "/ELMS_MajorProject_NaveenGupta.html"
+      "dest": "/index.html"
     }
   ]
 }

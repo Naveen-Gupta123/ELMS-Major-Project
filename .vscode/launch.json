@@ -8,7 +8,7 @@
             "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against local server",
-            "url": "http://127.0.0.1:8000/ELMS_MajorProject_NaveenGupta.html",
+            "url": "http://127.0.0.1:8000/",
             "webRoot": "${workspaceFolder}"
         }
     ]
