@@ -34,3 +34,9 @@ The project is configured for Vercel as a static site. After pushing to GitHub:
 ## Notes
 
 This project is designed as a clean, shareable portfolio submission for an MCA major project.
+
+## Contributing
+
+If you want to contribute, fork the repository and create a branch such as `contribute-4` before submitting a pull request.
+
+For setup and contribution guidelines, see `CONTRIBUTING.md`.
